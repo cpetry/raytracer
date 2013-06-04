@@ -1,0 +1,33 @@
+﻿Build started 04.06.2013 18:48:34.
+     1>Project "E:\Eigene Dateien\Dropbox\__Studium\6.Semester\Computergrafik I\Übungen\raytrace\raytrace.vcxproj" on node 2 (Build target(s)).
+     1>PreBuildEvent:
+         cd bin && flex -o..\lex.yy.c ..\raylex.l && bison -l -o ..\rayyacc.tab.c ..\rayyacc.y
+         :VCEnd
+         ..\rayyacc.y: Warnung: 15 Nicht-Terminale, die in Grammatik nutzlos sind
+         ..\rayyacc.y: Warnung: 22 Regeln, die in Grammatik nutzlos sind
+         ..\\rayyacc.y:81.1-23: Warnung: Nicht-Terminal nutzlos in Grammatik: some_viewing_parameters
+         ..\\rayyacc.y:83.7-85.7: Warnung: Nicht-Terminal nutzlos in Grammatik: $@1
+         ..\\rayyacc.y:86.5-22: Warnung: Nicht-Terminal nutzlos in Grammatik: viewing_parameters
+         ..\\rayyacc.y:109.1-18: Warnung: Nicht-Terminal nutzlos in Grammatik: picture_parameters
+         ..\\rayyacc.y:110.26-42: Warnung: Nicht-Terminal nutzlos in Grammatik: picture_parameter
+         ..\\rayyacc.y:105.26-42: Warnung: Nicht-Terminal nutzlos in Grammatik: viewing_parameter
+         ..\\rayyacc.y:115.7-16: Warnung: Nicht-Terminal nutzlos in Grammatik: resolution
+         ..\\rayyacc.y:116.7-16: Warnung: Nicht-Terminal nutzlos in Grammatik: background
+         ..\\rayyacc.y:120.7-14: Warnung: Nicht-Terminal nutzlos in Grammatik: eyepoint
+         ..\\rayyacc.y:121.7-12: Warnung: Nicht-Terminal nutzlos in Grammatik: lookat
+         ..\\rayyacc.y:124.7-8: Warnung: Nicht-Terminal nutzlos in Grammatik: up
+         ..\\rayyacc.y:122.7-10: Warnung: Nicht-Terminal nutzlos in Grammatik: fovy
+         ..\\rayyacc.y:123.7-12: Warnung: Nicht-Terminal nutzlos in Grammatik: aspect
+         ..\\rayyacc.y:163.1-15: Warnung: Nicht-Terminal nutzlos in Grammatik: global_lighting
+         ..\\rayyacc.y:63.35-42: Warnung: Nicht-Terminal nutzlos in Grammatik: angleVal
+         m4: cannot open `Dateien\Dropbox\__Studium\6.Semester\Computergrafik': No such file or directory
+         m4: cannot open `I\▄bungen\raytrace/share/bison': No such file or directory
+         m4: cannot open `E:\Eigene': No such file or directory
+         m4: cannot open `Dateien\Dropbox\__Studium\6.Semester\Computergrafik': No such file or directory
+         m4: cannot open `I\▄bungen\raytrace/share/bison/m4sugar/m4sugar.m4': No such file or directory
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V110\Microsoft.CppCommon.targets(124,5): warning MSB5021: "cmd" and its child processes are being terminated in order to cancel the build.
+     1>Done Building Project "E:\Eigene Dateien\Dropbox\__Studium\6.Semester\Computergrafik I\Übungen\raytrace\raytrace.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:16.81

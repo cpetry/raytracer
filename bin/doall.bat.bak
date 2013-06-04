@@ -1,0 +1,3 @@
+
+flex -o..\lex.yy.c ..\raylex.l
+bison -o ..\rayyacc.tab.c ..\rayyacc.y
