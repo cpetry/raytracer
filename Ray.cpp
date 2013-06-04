@@ -143,16 +143,18 @@ double Ray::intersect(Objekt &obj)
 	double a, b, c, d, e, f, g, h, j, k, t = -1.0,
 		acoef, bcoef, ccoef, root, disc;
 
-	a = obj.getSurface().a; 
-	b = obj.getSurface().b; 
-	c = obj.getSurface().c;
-	d = obj.getSurface().d; 
-	e = obj.getSurface().e; 
-	f = obj.getSurface().f;
-	g = obj.getSurface().g; 
-	h = obj.getSurface().h; 
-	j = obj.getSurface().j;
-	k = obj.getSurface().k;
+	Surface surface = obj.getSurface();
+
+	a = surface.a; 
+	b = surface.b; 
+	c = surface.c;
+	d = surface.d; 
+	e = surface.e; 
+	f = surface.f;
+	g = surface.g; 
+	h = surface.h; 
+	j = surface.j;
+	k = surface.k;
 
 	acoef = Vector(direction.dot(Vector(a, b, c)),
 		e*direction.y + f*direction.z,
