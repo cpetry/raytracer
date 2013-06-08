@@ -5,22 +5,22 @@
 #
 # Bild-Parameter
 #
-#resolution      200    200		# Bildbreite Bildhoehe (in Pixeln)
-#background	0.0	0.0	0.0		    # Hintergrundfarbe schwarz
+resolution      200    200		# Bildbreite Bildhoehe (in Pixeln)
+background	0.0	0.0	0.0		    # Hintergrundfarbe schwarz
 
 # 
 # Projektion
 #
-#eyepoint     -100.0   150.0      150.0	# Auge-Koordinaten
-#lookat        -15.0    25.0      -40.0	# Punkt, auf den das Auge schaut
-#fovy            55			# Field-of-view-Winkel
-#aspect          1.0			# Verhaeltnis Breite zu Hoehe
-#up             0.0     1.0     0.0     # Up-Vektor gibt an, wo oben ist
+eyepoint     -100.0   150.0      150.0	# Auge-Koordinaten
+lookat        -15.0    25.0      -40.0	# Punkt, auf den das Auge schaut
+fovy            55			# Field-of-view-Winkel
+aspect          1.0			# Verhaeltnis Breite zu Hoehe
+up             0.0     1.0     0.0     # Up-Vektor gibt an, wo oben ist
 
 #
 #  Globales Licht-Informationen
 #
-#ambience	0.0	0.0	0.0	# schwarz
+ambience	0.0		0.0		0.0	# schwarz
 
 
 #

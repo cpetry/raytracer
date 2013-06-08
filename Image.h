@@ -11,6 +11,8 @@ class Image {
     int *G;
     int *B;
     
+	unsigned char* picture;
+
     Image() {};
 	void alloc() { int n=xSize*ySize; R = new int[n]; G = new int[n]; B = new int[n]; };
 
@@ -27,6 +29,8 @@ class Image {
   public:
     Image(int x, int y);
     Image(char *ppm);
+
+	unsigned char* getImage();
 
 	// Save to ppm file
     void save(const char *ppm);

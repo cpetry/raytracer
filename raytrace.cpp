@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h" 
+#include <stdio.h>
 #include "Ray.h"
 #include "Color.h"
 #include "Image.h"
@@ -16,6 +17,10 @@ vector<Surface> surfaces;
 vector<Property> properties;
 vector<Objekt> objekte;
 vector<Light> lights;
+int resolutionX, resolutionY;
+double fovy, aspect;
+Vector eye, lookat, up;
+Color background, ambience;
 
 extern "C" {
 	extern FILE *yyin;
@@ -61,6 +66,41 @@ extern "C" {
 		objekte.push_back(Objekt(s, p));
 		fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
 	}
+	void add_resolution(int resx, int resy){
+		resolutionX = resx;
+		resolutionY = resy;
+	}
+	void add_background(double colr, double colg, double colb){
+		background.r = colr;
+		background.g = colg;
+		background.b = colb;
+	}
+	void add_eye_position(double eyex, double eyey, double eyez){
+		eye.x = eyex;
+		eye.y = eyey;
+		eye.z = eyez;
+	}
+	void add_lookat(double lookatx, double lookaty, double lookatz){
+		lookat.x = lookatx;
+		lookat.y = lookaty;
+		lookat.z = lookatz;
+	}
+	void add_fovy(double infovy){
+		fovy = infovy;
+	}
+	void add_up(double upx, double upy, double upz){
+		up.x = upx;
+		up.y = upy;
+		up.z = upz;
+	}
+	void add_aspect(double inaspect){
+		aspect = inaspect;
+	}
+	void add_ambience(double ambr, double ambg, double ambb){
+		ambience.r = ambr;
+		ambience.g = ambg;
+		ambience.b = ambb;
+	}
 }
 
 int main(int argc, _TCHAR* argv[])
@@ -69,18 +109,21 @@ int main(int argc, _TCHAR* argv[])
 	yyin = fopen("data/dflt.data","r");
 	if(yyin == NULL) {
 		fprintf(stderr, "Error: Konnte Datei nicht öffnen\n");
+		system("PAUSE");
 		return 1;
 	}
 	yyparse();
 	fclose (yyin);
 	
-	int Xresolution = 1250;
-	int Yresolution = 1250;
+	//int Xresolution = 1250;
+	//int Yresolution = 1250;
+	int Xresolution = resolutionX;
+	int Yresolution = resolutionY;
 	double dx = SCREENWIDTH / (double)Xresolution;
 	double dy = SCREENHEIGHT / (double)Yresolution;
 	double y = -0.5 * SCREENHEIGHT;
-	Vector eye(0, 0, SCREENHEIGHT * 8.0);
-	Ray	ray(Vector(1,0,0), eye ,0);
+	//Vector eye(0, 0, SCREENHEIGHT * 8.0);
+	Ray	ray(lookat, eye ,0);
 
 	Image bild(Xresolution, Yresolution);
 

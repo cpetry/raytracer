@@ -5,6 +5,7 @@
 
 using namespace std;
 
+extern Color background, ambience;
 /*----------------------------------------------------------------------------*/
 /* shade   arbeitet den folgenden Algorithmus ab:                             */
 /*   Schneide den Sichtstrahl mit jedem Objekt. Merke, welches Objekt den     */
@@ -40,14 +41,14 @@ Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights)
 
 	if (closest == NULL) {
 		if (depth == 0)
-			cur_color = Color(0.3,0.4,0.5); //background_color;
+			cur_color = background; //background_color;
 		else
 			cur_color = black;
 	} else {
 		intersection_position = origin.vadd(direction.svmpy(min_t));
 		normal = closest->get_normal(intersection_position);
 		reflected_ray = reflect(intersection_position, normal);
-		cur_color = closest->getProperty().getAmbient().outprodc(Color(1,1,1));  // black statt Globales Ambient
+		cur_color = closest->getProperty().getAmbient().outprodc(ambience);  // black statt Globales Ambient -> nun ambient
 
 		for (vector<Light>::iterator li = lights.begin(); li != lights.end(); ++li) {
 			lv.setDirection(li->getDirection());

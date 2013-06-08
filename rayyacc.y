@@ -55,6 +55,14 @@ extern void add_quadric(char *n, double a, double b, double c, double d, double 
 extern void add_property(char *n, double ar, double ag, double ab, double r, double g, double b, double s, double m);
 extern void add_objekt(char *ns, char *np);
 extern void add_light(char *n, double dirx, double diry, double dirz, double colr, double colg, double colb);
+extern void add_resolution(int resx, int resy);
+extern void add_background(double colr, double colg, double colb);
+extern void add_eye_position(double eyex, double eyey, double eyez);
+extern void add_lookat(double lookatx, double lookaty, double lookatz);
+extern void add_fovy(double infovy);
+extern void add_up(double upx, double upy, double upz);
+extern void add_aspect(double inaspect);
+extern void add_ambience(double ambr, double ambg, double ambb);
 %}
 
 
@@ -75,7 +83,7 @@ extern void add_light(char *n, double dirx, double diry, double dirz, double col
 %%
 
 scene 
-    : /* picture_parameters some_viewing_parameters global_lighting */ geometry
+    : picture_parameters some_viewing_parameters global_lighting geometry
     ;
 
 some_viewing_parameters
@@ -126,43 +134,67 @@ viewing_parameter
 
 resolution
     : RESOLUTION index index
-      { printf("resolution %d %d\n", $2, $3 ); }
+	  {
+		add_resolution($2, $3);
+		printf("resolution %d %d\n", $2, $3 );
+	  }
     ;
 
 background
     : BACKGROUND colorVal colorVal colorVal
-      { printf("background %f %f %f\n", $2, $3, $4); }
+      { 
+		add_background($2, $3, $4);
+		printf("background %f %f %f\n", $2, $3, $4); 
+	  }
     ;
 
 
 eyepoint
     : EYEPOINT realVal realVal realVal
-      { printf("eyepoint %f %f %f\n", $2, $3, $4 ); }
+      { 
+		add_eye_position($2, $3, $4);
+		printf("eyepoint %f %f %f\n", $2, $3, $4 ); 
+	  }
     ;
 
 lookat
     : LOOKAT realVal realVal realVal
-      { printf("lookat %f %f %f\n", $2, $3, $4 ); }
+      { 
+		add_lookat($2, $3, $4);
+	    printf("lookat %f %f %f\n", $2, $3, $4 ); 
+	  }
     ;
 
 up
     : UP realVal realVal realVal
-      { printf("up %f %f %f\n", $2, $3, $4); }
+      { 
+	    add_up($2, $3, $4);
+	    printf("up %f %f %f\n", $2, $3, $4); 
+	  }
     ;
 
 fovy
     : FOVY realVal
-      { printf("fovy %f\n", $2); }
+      { 
+	    add_fovy($2);
+	    printf("fovy %f\n", $2); 
+	  }
     ;
 
 aspect
     : ASPECT realVal
-      { printf("aspect %f\n", $2 ); }
+      { 
+	    add_aspect($2);
+	    printf("aspect %f\n", $2 ); 
+	  }
     ;
 
 global_lighting
     : AMBIENCE colorVal colorVal colorVal
-      { printf("ambience %f %f %f\n", $2, $3, $4); }
+      { 
+	    add_ambience($2, $3, $4);
+	    printf("ambience %f %f %f\n", $2, $3, $4); 
+	  }
     ;
 
 geometry 

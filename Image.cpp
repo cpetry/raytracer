@@ -35,6 +35,21 @@ void Image::print() {
     print(B, "Blue");
 }
 
+unsigned char* Image::getImage(){
+	if (picture != NULL)
+		delete picture;
+
+	unsigned char* picture = new unsigned char[ySize * xSize * 3];
+
+	for(int y = 0; y < ySize; y++) 
+		for(int x = 0; x < xSize; x++) {
+			picture[y * xSize + x + 0] = getR(x,y); 
+			picture[y * xSize + x + 1] = getG(x,y); 
+			picture[y * xSize + x + 2] = getB(x,y);
+		}
+	return picture;
+}
+
 Image::Image(char *ppm)
 {
     char line[200];
