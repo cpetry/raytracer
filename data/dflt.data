@@ -1,8 +1,4 @@
 #
-# Bisher nicht unterstütze Parameter
-#
-
-#
 # Bild-Parameter
 #
 resolution      200    200		# Bildbreite Bildhoehe (in Pixeln)

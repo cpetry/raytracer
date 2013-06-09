@@ -1,6 +1,7 @@
 #pragma once
 
-#include <string.h>
+#include <string>
+#include "File.h"
 
 class Image {
   private:
@@ -10,7 +11,7 @@ class Image {
     int *R;
     int *G;
     int *B;
-    
+
 	unsigned char* picture;
 
     Image() {};
@@ -21,15 +22,16 @@ class Image {
 	void setR(int x, int y, int v) { R[pos(x,y)] = v; };
 	void setG(int x, int y, int v) { G[pos(x,y)] = v; };
 	void setB(int x, int y, int v) { B[pos(x,y)] = v; };
+  public:
+	File* file;
+	Image(int x, int y, File *f);
+    Image(char *ppm);
+	
 	int getR(int x, int y) { return R[pos(x,y)]; };
 	int getG(int x, int y) { return G[pos(x,y)]; };
 	int getB(int x, int y) { return B[pos(x,y)]; };
     void print(int *, char *s);
     
-  public:
-    Image(int x, int y);
-    Image(char *ppm);
-
 	unsigned char* getImage();
 
 	// Save to ppm file

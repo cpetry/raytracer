@@ -1,11 +1,14 @@
 #include "StdAfx.h"
 #include "Image.h"
+#include "File.h"
+#include "Ray.h"
+
 
 int sgn(int x){
   return (x > 0) ? 1 : (x < 0) ? -1 : 0;
 }
 
-Image::Image(int x, int y) : xSize(x), ySize(y)
+Image::Image(int x, int y, File* f) : xSize(x), ySize(y), file(f)
 { 
 	alloc();
 };
@@ -36,9 +39,6 @@ void Image::print() {
 }
 
 unsigned char* Image::getImage(){
-	if (picture != NULL)
-		delete picture;
-
 	unsigned char* picture = new unsigned char[ySize * xSize * 3];
 
 	for(int y = 0; y < ySize; y++) 
