@@ -202,10 +202,11 @@ void GUI::slot_updatePicture(Image* pic, int percentage, float time_spent){
 	QSizePolicy exp;
 	
 	if (graphics_view){
-		graphics_view->setFixedSize(image.width(), image.height());
+		//graphics_view->setFixedSize(image.width(), image.height());
 		QGraphicsView* graphics_widget = static_cast<QGraphicsView*> (graphics_view->centralWidget());
 		graphics_widget->scene()->clear();
 		graphics_widget->scene()->addItem(item);
+		graphics_widget->setFixedSize(image.width(), image.height());
 	}
 	else{
 		graphics_view = new QMainWindow(central);

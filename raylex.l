@@ -28,6 +28,7 @@ poly { return(POLY); }
 polygon { return(POLY); } /* equivalent spelling */
 vertex { return(VERTEX); }
 quadric { return(QUADRIC); }
+sphere { return(SPHERE); }
 property { return(PROPERTY); }
 ambient { return(AMBIENT); }
 diffuse { return(DIFFUSE); }

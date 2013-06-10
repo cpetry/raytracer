@@ -75,7 +75,7 @@ extern void add_ambience(double ambr, double ambg, double ambb);
 %token <floatval> FLOAT
 %token <stringval> STRING
 %token RESOLUTION EYEPOINT LOOKAT UP FOVY ASPECT
-%token OBJECT QUADRIC POLY
+%token OBJECT SPHERE QUADRIC POLY
 %token VERTEX
 %token PROPERTY AMBIENT DIFFUSE SPECULAR MIRROR
 %token AMBIENCE BACKGROUND
@@ -112,7 +112,7 @@ some_viewing_parameters
 
 viewing_parameters 
     : viewing_parameters viewing_parameter
-    | /* empty */
+    | /**/
     ;
 
 picture_parameters
@@ -137,6 +137,7 @@ resolution
     : RESOLUTION index index
 	  {
 		add_resolution($2, $3);
+		resolution_seen = 1;
 		printf("resolution %d %d\n", $2, $3 );
 	  }
     ;
@@ -154,6 +155,7 @@ eyepoint
     : EYEPOINT realVal realVal realVal
       { 
 		add_eye_position($2, $3, $4);
+		eyepoint_seen = 1;
 		printf("eyepoint %f %f %f\n", $2, $3, $4 ); 
 	  }
     ;
@@ -162,6 +164,7 @@ lookat
     : LOOKAT realVal realVal realVal
       { 
 		add_lookat($2, $3, $4);
+		lookat_seen = 1;
 	    printf("lookat %f %f %f\n", $2, $3, $4 ); 
 	  }
     ;
@@ -170,6 +173,7 @@ up
     : UP realVal realVal realVal
       { 
 	    add_up($2, $3, $4);
+		up_seen = 1;
 	    printf("up %f %f %f\n", $2, $3, $4); 
 	  }
     ;
@@ -186,6 +190,7 @@ aspect
     : ASPECT realVal
       { 
 	    add_aspect($2);
+		aspect_seen = 1;
 	    printf("aspect %f\n", $2 ); 
 	  }
     ;
@@ -229,8 +234,20 @@ surfaces
 
 one_surface
     : quadric_surface
+	| sphere
     | polygon_surface
     ;
+
+sphere : OBJECT STRING SPHERE FLOAT FLOAT FLOAT FLOAT
+      {
+		// A = E = H = 1.0; 
+		// B = C = F = 0.0; 
+		// D = -2Xm , G = -2Ym , J = -2Zm  # K = Xm^2 + Ym^2 + Zm^2 - Radius^2
+
+		add_quadric($2, 1, 0, 0, -2*$4, 1, 0, -2*$5, 1, -2*$6, $4*$4 + $5*$5 + $6*$6 - $7*$7);
+		free($2);
+      }
+	  ;
 
 quadric_surface
     : OBJECT STRING QUADRIC realVal realVal realVal realVal realVal 
@@ -353,11 +370,6 @@ one_object
 		add_objekt($2, $3);
 		free($2);
 		free($3);
-      }
-	| OBJECT STRING realVal realVal realVal realVal
-      {
-		add_sphere($3, $4, $5, $6);
-		free($2);
       }
     ;
 

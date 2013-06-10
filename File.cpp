@@ -58,33 +58,20 @@ extern "C" {
 		file->objekte.push_back(Objekt(s, p));
 		fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
 	}
-	void add_sphere(char *ns, char *np) {
+	void add_sphere(double x, double y, double z, double radius) {
 		Surface *s = NULL;
 		Property *p = NULL;
-		std::string ss(ns);
-		std::string sp(np);
 
-		for(std::vector<Surface>::iterator i = file->surfaces.begin(); i != file->surfaces.end(); ++i) 
-			if(i->getName() == ss) {
-				s = &(*i);
-				break;
-			}
-		for(std::vector<Property>::iterator i = file->properties.begin(); i != file->properties.end(); ++i) 
-			if(i->getName() == sp) {
-				p = &(*i);
-				break;
-			}
+		//D = -2Xm , G = -2Ym , J = -2Zm und K = Xm^2 + Ym^2 + Zm^2 - Radius^2
+		s = new Surface("sphere", -2*x,0,0,0, -2*y,0,0, -2*z,0, x*x + y*y + z*z - radius*radius);
+		p = new Property("sphereprop", Color(0.5, 0, 0), Color(1, 0, 0), 0.2, 0.1);
 
 		if(s == NULL) {
-			fprintf(stderr, "Surface not found: %s\n", ns);
-			exit(1);
-		}
-		if(p == NULL) {
-			fprintf(stderr, "Property not found: %s\n", np);
+			fprintf(stderr, "Surface not found: %s\n", s);
 			exit(1);
 		}
 		file->objekte.push_back(Objekt(s, p));
-		fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
+		fprintf(stderr, "  adding object: surface %s, property %s\n", s, p);
 	}
 	void add_resolution(int resx, int resy){
 		file->resolutionX = resx;
