@@ -54,6 +54,7 @@ int yylex();
 extern void add_quadric(char *n, double a, double b, double c, double d, double e, double f, double g, double h, double j, double k);
 extern void add_property(char *n, double ar, double ag, double ab, double r, double g, double b, double s, double m);
 extern void add_objekt(char *ns, char *np);
+extern void add_sphere(double x, double y, double z, double radius);
 extern void add_light(char *n, double dirx, double diry, double dirz, double colr, double colg, double colb);
 extern void add_resolution(int resx, int resy);
 extern void add_background(double colr, double colg, double colb);
@@ -352,6 +353,11 @@ one_object
 		add_objekt($2, $3);
 		free($2);
 		free($3);
+      }
+	| OBJECT STRING realVal realVal realVal realVal
+      {
+		add_sphere($3, $4, $5, $6);
+		free($2);
       }
     ;
 

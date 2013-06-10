@@ -48,7 +48,7 @@ Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights, Color* backgrou
 		intersection_position = origin.vadd(direction.svmpy(min_t));
 		normal = closest->get_normal(intersection_position);
 		reflected_ray = reflect(intersection_position, normal);
-		cur_color = closest->getProperty().getAmbient().outprodc(*ambience);  // black statt Globales Ambient -> nun ambient
+		cur_color = closest->getProperty()->getAmbient().outprodc(*ambience);  // black statt Globales Ambient -> nun ambient
 
 		for (vector<Light>::iterator li = lights.begin(); li != lights.end(); ++li) {
 			lv.setDirection(li->getDirection());
@@ -69,7 +69,7 @@ Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights, Color* backgrou
 
 		if (depth < this->maxdepth) {
 			Color mirror_color = reflected_ray.shade(objects, lights, background, ambience);
-			mirror_color = mirror_color.scmpy(closest->getProperty().getMirror());
+			mirror_color = mirror_color.scmpy(closest->getProperty()->getMirror());
 			cur_color = mirror_color.addcolor(cur_color);
 		}
 	}
@@ -99,7 +99,7 @@ Color Ray::shaded_color(Light *light, Ray &reflectedray, Vector &normal, Objekt 
 	reflected_color = black;
 	if (1.0 + ldot > 1.0) {
 		lambert = light->getColor().scmpy(ldot);
-		reflected_color = lambert.outprodc(obj->getProperty().getReflectance());
+		reflected_color = lambert.outprodc(obj->getProperty()->getReflectance());
 	}
 	spec = reflectedray.getDirection().dot(light->getDirection());
 
@@ -108,7 +108,7 @@ Color Ray::shaded_color(Light *light, Ray &reflectedray, Vector &normal, Objekt 
 		spec = spec * spec;
 		spec = spec * spec;
 		spec = spec * spec;
-		spec *= obj->getProperty().getSpecular();
+		spec *= obj->getProperty()->getSpecular();
 		specular =  light->getColor().scmpy(spec);
 		reflected_color = reflected_color.addcolor(specular);
 	}
@@ -145,18 +145,18 @@ double Ray::intersect(Objekt &obj)
 	double a, b, c, d, e, f, g, h, j, k, t = -1.0,
 		acoef, bcoef, ccoef, root, disc;
 
-	Surface surface = obj.getSurface();
+	Surface* surface = obj.getSurface();
 
-	a = surface.a; 
-	b = surface.b; 
-	c = surface.c;
-	d = surface.d; 
-	e = surface.e; 
-	f = surface.f;
-	g = surface.g; 
-	h = surface.h; 
-	j = surface.j;
-	k = surface.k;
+	a = surface->a; 
+	b = surface->b; 
+	c = surface->c;
+	d = surface->d; 
+	e = surface->e; 
+	f = surface->f;
+	g = surface->g; 
+	h = surface->h; 
+	j = surface->j;
+	k = surface->k;
 
 	acoef = Vector(direction.dot(Vector(a, b, c)),
 		e*direction.y + f*direction.z,
