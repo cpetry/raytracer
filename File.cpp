@@ -26,9 +26,9 @@ extern "C" {
 		fprintf(stderr,"  adding quadric %s %f %f %f %f %f %f %f %f %f %f %f %f\n", n, a,b,c,d,e,f,g,h,j,k);
 		file->surfaces.push_back(Surface(n, a,b,c,d,e,f,g,h,j,k));
 	};
-	void add_property(char *n,  double ar, double ag, double ab, double r, double g, double b, double s, double m) {
+	void add_property(char *n,  double ar, double ag, double ab, double r, double g, double b, double s, double ss, double m) {
 		fprintf(stderr,"  adding prop %f %f %f %f %f\n", r, g, b, s, m);
-		file->properties.push_back(Property(n, Color(ar, ag, ab), Color(r, g, b), s, m));
+		file->properties.push_back(Property(n, Color(ar, ag, ab), Color(r, g, b), s, ss, m));
 	};
 	void add_objekt(char *ns, char *np) {
 		Surface *s = NULL;
@@ -57,21 +57,6 @@ extern "C" {
 		}
 		file->objekte.push_back(Objekt(s, p));
 		fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
-	}
-	void add_sphere(double x, double y, double z, double radius) {
-		Surface *s = NULL;
-		Property *p = NULL;
-
-		//D = -2Xm , G = -2Ym , J = -2Zm und K = Xm^2 + Ym^2 + Zm^2 - Radius^2
-		s = new Surface("sphere", -2*x,0,0,0, -2*y,0,0, -2*z,0, x*x + y*y + z*z - radius*radius);
-		p = new Property("sphereprop", Color(0.5, 0, 0), Color(1, 0, 0), 0.2, 0.1);
-
-		if(s == NULL) {
-			fprintf(stderr, "Surface not found: %s\n", s);
-			exit(1);
-		}
-		file->objekte.push_back(Objekt(s, p));
-		fprintf(stderr, "  adding object: surface %s, property %s\n", s, p);
 	}
 	void add_resolution(int resx, int resy){
 		file->resolutionX = resx;

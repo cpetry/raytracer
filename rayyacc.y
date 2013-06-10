@@ -43,7 +43,7 @@ static int yyerror(char *s)
 }
 
 struct {
-	double ar,ag,ab, r, g, b, s, m;
+	double ar,ag,ab, r, g, b, s, ss, m;
 	} prop;
 
 struct {
@@ -52,7 +52,7 @@ struct {
 
 int yylex();
 extern void add_quadric(char *n, double a, double b, double c, double d, double e, double f, double g, double h, double j, double k);
-extern void add_property(char *n, double ar, double ag, double ab, double r, double g, double b, double s, double m);
+extern void add_property(char *n, double ar, double ag, double ab, double r, double g, double b, double s, double ss, double m);
 extern void add_objekt(char *ns, char *np);
 extern void add_sphere(double x, double y, double z, double radius);
 extern void add_light(char *n, double dirx, double diry, double dirz, double colr, double colg, double colb);
@@ -277,7 +277,10 @@ vertices
 
 one_vertex
     : VERTEX realVal realVal realVal
-      { printf("vertex %f %f %f\n", $2, $3, $4); }
+      {
+	    
+		printf("vertex %f %f %f\n", $2, $3, $4); 
+	  }
     ;
 
 polygon_section
@@ -303,7 +306,9 @@ indices
 
 one_index
 	: index
-	{ printf("polygon idx %d\n", $1); }
+	{ 
+	  printf("polygon idx %d\n", $1); 
+	}
 	;
 
 property_section
@@ -318,7 +323,7 @@ properties
 one_property
     : PROPERTY STRING ambient diffuse specular mirror
 	{
-		add_property($2, prop.ar, prop.ag, prop.ab, prop.r, prop.g, prop.b, prop.s, prop.m); 
+		add_property($2, prop.ar, prop.ag, prop.ab, prop.r, prop.g, prop.b, prop.s, prop.ss, prop.m); 
 		free($2);
 	}
     ;
@@ -342,9 +347,15 @@ diffuse
     ;
 
 specular
-    : SPECULAR  zeroToOneVal /* realVal */
+    : SPECULAR  zeroToOneVal realVal
       { 
 		prop.s = $2;
+		prop.ss = $3;
+      }
+	| SPECULAR  zeroToOneVal
+      { 
+		prop.s = $2;
+		prop.ss = 0;
       }
     ;
 
