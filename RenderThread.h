@@ -5,19 +5,22 @@ class RenderThread : public QThread
 {
     Q_OBJECT
 public:
-	RenderThread(Image* img){
+	RenderThread(Image* img, int update_precentage){
 		this->img = new Image(img->file->resolutionX, img->file->resolutionY, img->file);
 		*this->img = *img;
+		this->update_precentage = update_precentage;
+		this->time_spent = 0;
 	}
     void run() Q_DECL_OVERRIDE {
         /* expensive or blocking operation  */
-		this->renderPicture(/*refresh %*/ 5.0f);
-
-        emit resultReady(img);
+		this->renderPicture();
     }
 private:
+	int update_precentage;
+	float time_spent;
 	Image* img;
-	void RenderThread::renderPicture(float update_percentage);
+	void renderPicture();
+
 signals:
-    void resultReady(Image* pic);
+    void resultReady(Image* pic, int percentage, float time_spent);
 };

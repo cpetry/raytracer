@@ -103,8 +103,9 @@ File* File::openFile(QString filename){
 	}
 	yyparse();
 	fclose (yyin);
-
+	
 	*this = *file;
+	
 	background = this->background;
 	ambience = this->ambience;
 

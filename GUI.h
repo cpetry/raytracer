@@ -13,6 +13,8 @@ class GUI : public QMainWindow
 
 public:
 	File* file;
+	QImage* img;
+	bool isRendering;
 
 	GUI(QWidget *parent = 0);
 	~GUI(){};
@@ -24,19 +26,15 @@ public:
 
 //slots
 public slots:
-	void slot_updatePicture(Image* pic);
-	void slot_ButtonRender(const QVariant &);
-	void slot_ButtonSearch(const QVariant &);
-	void slot_ChooseBackground(const QVariant &);
-
-    // note: just a sample slot demonstrating a signal from the backend thread
-    void new_image() {
-        // TODO: update gui
-        printf(">>> New Image arrived! <<<\n\n");
-    }
-
-//signals:
-    //void stop_backend_thread();
+	void slot_updatePicture(Image* pic, int percentage, float time_spent);
+	void slot_ButtonRender();
+	void slot_ButtonSearch();
+	void slot_ChooseBackground();
+	void slot_ChooseAmbience();
+	void slot_ChooseSuperSampling(const QString & text);
+	void slot_ChooseAspect(const QString & text);
+	void slot_SaveImage();
+	void slot_isRendering();
 
 private:
 	Ui::MainWindow ui;

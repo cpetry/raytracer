@@ -20,7 +20,7 @@ extern Color background, ambience;
 /* Rueckgabeparameter: Farbe, die auf diesem Strahl zu sehen ist              */
 /*----------------------------------------------------------------------------*/
 
-Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights)
+Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights, Color* background, Color* ambience)
 {
 	Objekt *closest = NULL;
 	Color cur_color; 
@@ -41,14 +41,14 @@ Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights)
 
 	if (closest == NULL) {
 		if (depth == 0)
-			cur_color = background; //background_color;
+			cur_color = *background; //background_color;
 		else
 			cur_color = black;
 	} else {
 		intersection_position = origin.vadd(direction.svmpy(min_t));
 		normal = closest->get_normal(intersection_position);
 		reflected_ray = reflect(intersection_position, normal);
-		cur_color = closest->getProperty().getAmbient().outprodc(ambience);  // black statt Globales Ambient -> nun ambient
+		cur_color = closest->getProperty().getAmbient().outprodc(*ambience);  // black statt Globales Ambient -> nun ambient
 
 		for (vector<Light>::iterator li = lights.begin(); li != lights.end(); ++li) {
 			lv.setDirection(li->getDirection());
@@ -67,8 +67,8 @@ Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights)
 			} 
 		}
 
-		if (depth < 5) {
-			Color mirror_color = reflected_ray.shade(objects, lights);
+		if (depth < this->maxdepth) {
+			Color mirror_color = reflected_ray.shade(objects, lights, background, ambience);
 			mirror_color = mirror_color.scmpy(closest->getProperty().getMirror());
 			cur_color = mirror_color.addcolor(cur_color);
 		}
@@ -136,6 +136,7 @@ Ray Ray::reflect(Vector &origin, Vector &normal)
 	reflection.direction = direction.vsub(reflection.direction).normalize();
 
 	reflection.depth = depth + 1;
+	reflection.maxdepth = maxdepth;
 	return(reflection);
 } /* reflect() */
 

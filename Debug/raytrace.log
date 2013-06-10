@@ -1,4 +1,4 @@
-﻿Build started 09.06.2013 22:21:46.
+﻿Build started 10.06.2013 14:30:20.
      1>Project "C:\Users\Perty\raytrace\raytrace.vcxproj" on node 2 (Build target(s)).
      1>PreBuildEvent:
          cd bin && flex -o..\lex.yy.c ..\raylex.l && bison -l -o ..\rayyacc.tab.c ..\rayyacc.y
@@ -7,16 +7,9 @@
          ..\rayyacc.y: Warnung: 1 Regel, die in Grammatik nutzlos ist
          ..\\rayyacc.y:71.35-42: Warnung: Nicht-Terminal nutzlos in Grammatik: angleVal
          ..\\rayyacc.y:405.12-413.5: Warnung: Regeln nutzlos in Grammatik: angleVal: realVal
-       CustomBuild:
-         Moc'ing GUI.h...
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Qt\include /IC:\Qt\include\QtCore /IC:\Qt\include\QtGui /IC:\Qt\include\QtWidgets /I.\GeneratedFiles /IC:\Qt\include\QtOpenGL /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D _DEBUG /D _CONSOLE /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D QT_OPENGL_LIB /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt GeneratedFiles\Debug\moc_GUI.cpp Gui.cpp main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Qt\include /IC:\Qt\include\QtCore /IC:\Qt\include\QtGui /IC:\Qt\include\QtWidgets /I.\GeneratedFiles /IC:\Qt\include\QtOpenGL /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D _DEBUG /D _CONSOLE /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D QT_OPENGL_LIB /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Gui.cpp
          Gui.cpp
-         moc_GUI.cpp
-         Generating Code...
-         Compiling...
-         main.cpp
-         Generating Code...
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Qt\include /IC:\Qt\include\QtCore /IC:\Qt\include\QtGui /IC:\Qt\include\QtWidgets /I.\GeneratedFiles /IC:\Qt\include\QtOpenGL /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D _DEBUG /D _CONSOLE /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D QT_OPENGL_LIB /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt rayyacc.tab.c
          rayyacc.tab.c
        Link:
@@ -41,4 +34,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:09.73
+Time Elapsed 00:00:05.62
