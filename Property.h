@@ -15,6 +15,7 @@ public:
 	Color getAmbient() { return ambient; };
 	Color getReflectance() { return reflectance; };
 	double getSpecular() { return specular; };
+	double getShininess() { return shininess; };
 	double getMirror() { return mirror; };
 	std::string getName() { return name; };
 };

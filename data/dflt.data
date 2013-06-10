@@ -70,21 +70,21 @@ object geo5 sphere	0.0   100.0   -250.0   25.0
 property prop1
 ambient  0.2    0.0     0.0	  # leicht roetlicher Filter
 diffuse	 0.7	0.7	0.7	      # helleres silbergrau
-specular 1.0				  # Besser wäre specular 1.0	4  
+specular 1.0	3			  # Besser wäre specular 1.0	4  
 mirror	 0.8
 
 # Oberflaechenbeschaffenheit 2
 property prop2
 ambient  0.0    0.2     0.0	 # leicht gruenlich Filter
 diffuse	 0.5	0.5		0.5	 # mittleres silbergrau
-specular 1.0
+specular 1.0	2
 mirror	 1.0
 
 # Oberflaechenbeschaffenheit 3
 property prop3
 ambient  0.0    0.0     0.2	# leicht blaeulich Filter
 diffuse  0.1	0.6		0.1	# gruen
-specular 1.0
+specular 1.0	2
 mirror	 0.2
 
 
