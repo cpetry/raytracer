@@ -298,13 +298,14 @@ polygons
 
 one_polygon
     : POLY  
-      { printf("polygon"); 
+      { printf("polygon\n"); 
 		add_index_array();
 	  }
 	  
       indices
       { 
-	    printf("\n");
+	    
+		printf("\n");
 	  }
     ;
 

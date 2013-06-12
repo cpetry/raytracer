@@ -68,29 +68,34 @@ extern "C" {
 		if (s->getType() == surface_type::POLY)
 			for (Surface polygon : s->polygons){
 				file->objekte.push_back(Objekt(new Surface(polygon), p));
+				fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
 			}
 		else
 			file->objekte.push_back(Objekt(s, p));
 		file->vertices.clear();
+		file->indices.clear();
 		fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
 	}
 	void add_polygon(char *n){
-		std::vector<Surface> polygons;
+		std::vector<Surface> triangles;
 		while(file->indices.size() > 0){
 			Vector vertices[3];
+
 			for (int i=0; i < 3; i++)
 				vertices[i] = file->vertices.at(file->indices.back().at(i)-1);
-			polygons.push_back(Surface(vertices[0], vertices[1], vertices[2]));
-
+			triangles.push_back(Surface(vertices[0], vertices[1], vertices[2]));
+			
 			if (file->indices.back().size() == 4){
 				vertices[0] = file->vertices.at(file->indices.back().at(2)-1);
 				vertices[1] = file->vertices.at(file->indices.back().at(3)-1);
 				vertices[2] = file->vertices.at(file->indices.back().at(0)-1);
-				polygons.push_back(Surface(vertices[0], vertices[1], vertices[2]));
+				triangles.push_back(Surface(vertices[0], vertices[1], vertices[2]));
 			}
 			file->indices.pop_back();
 		}
-		file->surfaces.push_back(Surface(n, polygons));
+		
+		file->surfaces.push_back(Surface(n, triangles));
+		file->vertices.clear();
 	}
 	void add_resolution(int resx, int resy){
 		file->resolutionX = resx;
