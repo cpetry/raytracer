@@ -4,6 +4,7 @@
 #include "Light.h"
 #include "Objekt.h"
 #include "vector"
+#include "Surface.h"
 
 class Ray
 {
@@ -28,7 +29,8 @@ public:
 
 	Ray reflect(Vector &origin, Vector &normal);
 	double intersect(Objekt &obj);
-
+	double intersectQuadric(Objekt &obj);
+	double intersectPolygon(Objekt &obj);
 };
 
 

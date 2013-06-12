@@ -261,9 +261,13 @@ quadric_surface
 polygon_surface
     : OBJECT STRING POLY 
       {
-	printf("object poly\n"); 
+		  printf("object poly\n");
       }
       vertex_section polygon_section
+	  {
+		  add_polygon($2);
+		  free($2);
+	  }
     ;
 
 vertex_section
@@ -278,7 +282,7 @@ vertices
 one_vertex
     : VERTEX realVal realVal realVal
       {
-	    
+	    add_vertex($2, $3, $4);
 		printf("vertex %f %f %f\n", $2, $3, $4); 
 	  }
     ;
@@ -294,9 +298,14 @@ polygons
 
 one_polygon
     : POLY  
-      { printf("polygon"); }
+      { printf("polygon"); 
+		add_index_array();
+	  }
+	  
       indices
-      { printf("\n"); }
+      { 
+	    printf("\n");
+	  }
     ;
 
 indices
@@ -306,7 +315,8 @@ indices
 
 one_index
 	: index
-	{ 
+	{
+	  add_index($1); 
 	  printf("polygon idx %d\n", $1); 
 	}
 	;

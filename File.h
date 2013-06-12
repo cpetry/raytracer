@@ -15,6 +15,8 @@ class File{
 public:
 	std::vector<Surface> surfaces;
 	std::vector<Property> properties;
+	std::vector<Vector> vertices;
+	std::vector<std::vector<int>> indices;
 	std::vector<Objekt> objekte;
 	std::vector<Light> lights;
 	int resolutionX, resolutionY, bounces, super_sampling;

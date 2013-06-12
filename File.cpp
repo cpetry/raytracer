@@ -9,7 +9,6 @@
 #include "Objekt.h"
 #include "Light.h"
 
-
 Color background, ambience;
 
 extern "C" {
@@ -30,6 +29,16 @@ extern "C" {
 		fprintf(stderr,"  adding prop %f %f %f %f %f\n", r, g, b, s, m);
 		file->properties.push_back(Property(n, Color(ar, ag, ab), Color(r, g, b), s, ss, m));
 	};
+	void add_vertex(double x, double y, double z){
+		fprintf(stderr,"  adding vector %f %f %f\n", x, y, z);
+		file->vertices.push_back(Vector(x,y,z));
+	}
+	void add_index_array(){
+		file->indices.push_back(std::vector<int>());
+	}
+	void add_index(int i){
+		file->indices.back().push_back(i);
+	}
 	void add_objekt(char *ns, char *np) {
 		Surface *s = NULL;
 		Property *p = NULL;
@@ -55,8 +64,33 @@ extern "C" {
 			fprintf(stderr, "Property not found: %s\n", np);
 			exit(1);
 		}
-		file->objekte.push_back(Objekt(s, p));
+
+		if (s->getType() == surface_type::POLY)
+			for (Surface polygon : s->polygons){
+				file->objekte.push_back(Objekt(new Surface(polygon), p));
+			}
+		else
+			file->objekte.push_back(Objekt(s, p));
+		file->vertices.clear();
 		fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
+	}
+	void add_polygon(char *n){
+		std::vector<Surface> polygons;
+		while(file->indices.size() > 0){
+			Vector vertices[3];
+			for (int i=0; i < 3; i++)
+				vertices[i] = file->vertices.at(file->indices.back().at(i)-1);
+			polygons.push_back(Surface(vertices[0], vertices[1], vertices[2]));
+
+			if (file->indices.back().size() == 4){
+				vertices[0] = file->vertices.at(file->indices.back().at(2)-1);
+				vertices[1] = file->vertices.at(file->indices.back().at(3)-1);
+				vertices[2] = file->vertices.at(file->indices.back().at(0)-1);
+				polygons.push_back(Surface(vertices[0], vertices[1], vertices[2]));
+			}
+			file->indices.pop_back();
+		}
+		file->surfaces.push_back(Surface(n, polygons));
 	}
 	void add_resolution(int resx, int resy){
 		file->resolutionX = resx;

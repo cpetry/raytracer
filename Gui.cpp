@@ -34,7 +34,7 @@ GUI::GUI(QWidget *parent) : QMainWindow(parent)
 void GUI::init(){
 	this->isRendering = false;
 	this->setWindowTitle("Raytracer");
-	setGui("C:/Users/Perty/raytrace/data/dflt.data");
+	setGui("C:/Users/Perty/raytrace/data/scene.data");
 	
 	// setting update percentage
 	QLineEdit* line_edit_updatePercentage = this->centralWidget()->findChild<QLineEdit *>("lineEditUpdatePercentage");

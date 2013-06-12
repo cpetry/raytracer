@@ -2,6 +2,8 @@
 #include "Ray.h"
 #include "math.h"
 #include "float.h"
+#include <vector>
+
 
 using namespace std;
 
@@ -141,12 +143,11 @@ Ray Ray::reflect(Vector &origin, Vector &normal)
 	return(reflection);
 } /* reflect() */
 
-double Ray::intersect(Objekt &obj)
-{
+
+double Ray::intersectQuadric(Objekt &obj){
+	Surface* surface = obj.getSurface();
 	double a, b, c, d, e, f, g, h, j, k, t = -1.0,
 		acoef, bcoef, ccoef, root, disc;
-
-	Surface* surface = obj.getSurface();
 
 	a = surface->a; 
 	b = surface->b; 
@@ -188,3 +189,69 @@ double Ray::intersect(Objekt &obj)
 	return ((0.001 < t) ? t : -1.0);
 } /* intersect() */
 
+double Ray::intersect(Objekt &obj){
+	if (obj.getSurface()->getType() == surface_type::QUADRIC)
+		return intersectQuadric(obj);
+	else if (obj.getSurface()->getType() == surface_type::POLYGON){
+		return intersectPolygon(obj);
+	}
+}
+
+double Ray::intersectPolygon(Objekt &obj){
+	Surface* polygon = obj.getSurface();
+	Vector u = polygon->v2.vsub(polygon->v1);
+	Vector v = polygon->v3.vsub(polygon->v1);
+	Vector w = u.cross(v);
+	Vector w0;
+	
+	if (w.x == 0 && w.y == 0 && w.z == 0)
+		return -1.0;	// triangle is degenerate -> not dealing with this case
+
+	Vector rPos = this->getOrigin();
+	Vector rDir = this->getDirection();
+	w0 = rPos.vsub(polygon->v1);
+
+	float first = -w.dot(w0);
+	float second = w.dot(rDir);
+	if (fabs(second) < 0.000001) // ray parallel to triangle plane
+		if (first == 0)     // ray disjoint from plane
+			return -1.0;   // ray lies triangle plane
+		else
+			return -1.0;	// ray disjoint from plane
+
+	float r = first/second;
+	if (r < 0.0 || second == 0 )
+		return -1.0;
+	
+	
+	Vector interPoint = this->getDirection().svmpy(r).vadd(this->getOrigin());
+	//Vector interPoint = this->getOrigin().vadd(this->getDirection()).svmpy(r);
+	Vector normal = w;
+
+	float uu,uv,vv,wu,wv,div;
+
+	uu = u.dot(u);
+	uv = u.dot(v);
+	vv = v.dot(v);
+	w = interPoint.vsub(polygon->v1);
+	wu = w.dot(u);
+	wv = w.dot(v);
+	div = (uv * uv - uu * vv);
+
+	float s = (uv * wv - vv * wu) / div;
+	if (s < 0.0 || s > 1.0)
+		return -1.0;
+	float t = (uv * wu - uu * wv) / div;
+	if (t < 0.0 || (s+t) > 1.0)
+		return -1.0;
+
+	// texture coordinates, still testing!
+	//float ax = (this->texb.r - this->texa.r) * s;
+	//float ay = (this->texc.g - this->texa.g) * t;
+	//local.setTexCoords(vec2(ax,ay));
+
+	//local.setPos(interPoint);
+	obj.set_normal(normal);
+	//thit = r;
+	return ((0.001 < r) ? r : -1.0);
+}

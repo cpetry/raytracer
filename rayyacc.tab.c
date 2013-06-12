@@ -516,11 +516,11 @@ static const yytype_uint16 yyrline[] =
        0,    87,    87,    92,    92,   114,   115,   119,   120,   124,
      125,   129,   130,   131,   132,   133,   137,   146,   155,   164,
      173,   182,   190,   199,   208,   212,   216,   220,   208,   227,
-     231,   232,   236,   237,   238,   241,   253,   263,   262,   270,
-     274,   275,   279,   287,   291,   292,   297,   296,   303,   304,
-     308,   315,   319,   320,   324,   332,   341,   350,   355,   363,
-     370,   374,   375,   379,   388,   392,   393,   396,   403,   411,
-     421,   423,   446,   448,   452
+     231,   232,   236,   237,   238,   241,   253,   263,   262,   274,
+     278,   279,   283,   291,   295,   296,   301,   300,   312,   313,
+     317,   325,   329,   330,   334,   342,   351,   360,   365,   373,
+     380,   384,   385,   389,   398,   402,   403,   406,   413,   421,
+     431,   433,   456,   458,   462
 };
 #endif
 
@@ -1662,31 +1662,44 @@ yyreduce:
   case 37:
 
     {
-	printf("object poly\n"); 
+		  printf("object poly\n");
       ;}
+    break;
+
+  case 38:
+
+    {
+		  add_polygon((yyvsp[(2) - (6)].stringval));
+		  free((yyvsp[(2) - (6)].stringval));
+	  ;}
     break;
 
   case 42:
 
     {
-	    
+	    add_vertex((yyvsp[(2) - (4)].floatval), (yyvsp[(3) - (4)].floatval), (yyvsp[(4) - (4)].floatval));
 		printf("vertex %f %f %f\n", (yyvsp[(2) - (4)].floatval), (yyvsp[(3) - (4)].floatval), (yyvsp[(4) - (4)].floatval)); 
 	  ;}
     break;
 
   case 46:
 
-    { printf("polygon"); ;}
+    { printf("polygon"); 
+		add_index_array();
+	  ;}
     break;
 
   case 47:
 
-    { printf("\n"); ;}
+    { 
+	    printf("\n");
+	  ;}
     break;
 
   case 50:
 
-    { 
+    {
+	  add_index((yyvsp[(1) - (1)].intval)); 
 	  printf("polygon idx %d\n", (yyvsp[(1) - (1)].intval)); 
 	;}
     break;

@@ -1,4 +1,5 @@
-resolution    1920     1080		# Bildbreite Bildhoehe (in Pixeln)
+#resolution    1920     1080		# Bildbreite Bildhoehe (in Pixeln)
+resolution    800     600
 background	0.0	0.0	0.0	# Hintergrundlicht
 
 eyepoint     -100.0   150.0      150.0	# Auge-Koordinaten
@@ -148,7 +149,7 @@ color	   0.0	 0.5	 1.0
 object	 g1	 p3
 object	 g2	 p1
 object	 g3	 p2
-#object	 g4	 p3
-#object	 g5	 p2
+object	 g4	 p3
+object	 g5	 p2
 object	 g6	 p3
 object	 g7	 p1
