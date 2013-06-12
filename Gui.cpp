@@ -56,13 +56,16 @@ void GUI::init(){
 		combobox_aspect->addItem(QString("4:3"));
 		combobox_aspect->addItem(QString("16:9"));
 		combobox_aspect->addItem(QString("16:10"));
+		combobox_aspect->setCurrentIndex(-1);
 	}
 	
 	// Connecting Signals and Slots
 	connect(this->findChild<QPushButton *>("buttonRender"), SIGNAL(clicked()), this, SLOT(slot_ButtonRender()));
 	connect(this->findChild<QPushButton *>("buttonSearch"), SIGNAL(clicked()), this, SLOT(slot_ButtonSearch()));
+	connect(this->findChild<QPushButton *>("buttonRefresh"), SIGNAL(clicked()), this, SLOT(slot_ButtonRefresh()));
 	connect(this->findChild<QToolButton *>("buttonBackground"), SIGNAL(clicked()), this, SLOT(slot_ChooseBackground()));
 	connect(this->findChild<QToolButton *>("buttonAmbience"), SIGNAL(clicked()), this, SLOT(slot_ChooseAmbience()));
+	connect(this->findChild<QLineEdit *>("lineEditAspect"), SIGNAL(textEdited(QString)), this, SLOT(slot_EditedTextAspect(QString)));
 	connect(combobox_supersampling, SIGNAL(activated(QString)), this, SLOT(slot_ChooseSuperSampling(QString)));
 	connect(combobox_aspect, SIGNAL(activated(QString)), this, SLOT(slot_ChooseAspect(QString)));
 }
@@ -87,6 +90,9 @@ void GUI::setGui(QString filename){
 
 	// setting FOV
 	central->findChild<QLineEdit *>("lineEditFOV")->setText(QString::number(file->fovy));
+
+	// setting aspect
+	central->findChild<QLineEdit *>("lineEditAspect")->setText(QString::number(file->aspect));
 	
 	// setting bounces
 	central->findChild<QLineEdit *>("lineEditBounces")->setText(QString::number(file->bounces));
@@ -109,6 +115,7 @@ void GUI::setFile(){
 	file->resolutionY = this->centralWidget()->findChild<QLineEdit *>("lineEditResY")->text().toInt();
 	file->bounces = this->centralWidget()->findChild<QLineEdit *>("lineEditBounces")->text().toInt();
 	file->fovy = this->centralWidget()->findChild<QLineEdit *>("lineEditFOV")->text().toDouble();
+	file->aspect = this->centralWidget()->findChild<QLineEdit *>("lineEditAspect")->text().toDouble();
 }
 
 
@@ -128,6 +135,8 @@ void GUI::slot_ButtonRender(){
 		connect(render_thread, &RenderThread::resultReady, this, &GUI::slot_updatePicture);
 		connect(render_thread, &RenderThread::finished, render_thread, &QObject::deleteLater);
 		connect(render_thread, SIGNAL(finished()), this, SLOT(slot_isRendering()));
+
+		this->findChild<QPushButton *>("buttonRender")->setDisabled(true);
 		this->isRendering = true;
 		render_thread->start();	
 	}
@@ -147,8 +156,13 @@ void GUI::slot_ButtonSearch(){
 		this->setGui(fileName);
 }
 
+void GUI::slot_ButtonRefresh(){
+	setGui(this->centralWidget()->findChild<QLineEdit *>("lineEditFilename")->text());
+}
+
 void GUI::slot_isRendering(){
 	this->isRendering = false;
+	this->findChild<QPushButton *>("buttonRender")->setDisabled(false);
 }
 
 void GUI::slot_ChooseBackground(){
@@ -174,14 +188,23 @@ void GUI::slot_ChooseSuperSampling(const QString & text){
 }
 
 void GUI::slot_ChooseAspect(const QString & text){
+	float aspect = 1;
 	if (text == "1:1")
-		file->aspect = 1;
+		aspect = 1;
 	else if (text == "4:3")
-		file->aspect = 4.0f/3.0f;
+		aspect = 4.0f/3.0f;
 	else if (text == "16:9")
-		file->aspect = 16.0f/9.0f;
+		aspect = 16.0f/9.0f;
 	else if (text == "16:10")
-		file->aspect = 16.0f/10.0f;
+		aspect = 16.0f/10.0f;
+
+	file->aspect = aspect;
+	this->centralWidget()->findChild<QLineEdit *>("lineEditAspect")->setText(QString::number(aspect));
+}
+
+void GUI::slot_EditedTextAspect(const QString & text){
+	file->aspect = text.toDouble();
+	this->centralWidget()->findChild<QComboBox *>("comboBoxAspect")->setCurrentIndex(-1);
 }
 
 void GUI::slot_updatePicture(Image* pic, int percentage, float time_spent){
@@ -202,14 +225,20 @@ void GUI::slot_updatePicture(Image* pic, int percentage, float time_spent){
 	QSizePolicy exp;
 	
 	if (graphics_view){
-		//graphics_view->setFixedSize(image.width(), image.height());
+		graphics_view->setVisible(true);
+		
 		QGraphicsView* graphics_widget = static_cast<QGraphicsView*> (graphics_view->centralWidget());
 		graphics_widget->scene()->clear();
 		graphics_widget->scene()->addItem(item);
 		graphics_widget->setFixedSize(image.width(), image.height());
+		graphics_view->setFixedSize(graphics_widget->width(), 
+									graphics_widget->height()
+									+ graphics_view->statusBar()->size().height()
+									+ graphics_view->menuBar()->size().height());
 	}
 	else{
 		graphics_view = new QMainWindow(central);
+		graphics_view->move(QPoint(0,0));
 		graphics_view->setStatusBar(new QStatusBar());
 		graphics_view->setObjectName("Rendered picture");
 		graphics_view->setWindowTitle("Rendered picture");
@@ -224,7 +253,7 @@ void GUI::slot_updatePicture(Image* pic, int percentage, float time_spent){
 		graphics_view->setMenuBar(menu);
 
 		
-		QGraphicsView* graphics_widget = new QGraphicsView();
+		QGraphicsView* graphics_widget = new QGraphicsView(graphics_view);
 		graphics_widget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		graphics_widget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		
@@ -234,7 +263,7 @@ void GUI::slot_updatePicture(Image* pic, int percentage, float time_spent){
 		graphics_widget->setScene(scene);
 		graphics_view->show();
 	}
-
+	central->activateWindow();
 	graphics_view->statusBar()->showMessage(QString::number(time_spent) + QString("secs rendered"));
 	central->findChild<QProgressBar *>("progressBar")->setValue(percentage);
 }
