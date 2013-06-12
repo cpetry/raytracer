@@ -12,6 +12,8 @@ Qt5 GUI, enhancements done by myself.
 - Data file loading (with several parameters)
  - Quadrics
  - Spheres
+ - Polygons
+- Save rendered Picture (BMP, JPG, JPEG, PNG, PPM, XBM, XPM) 
 - Resolution
 - Field of view
 - Aspect ratio
@@ -24,6 +26,7 @@ Qt5 GUI, enhancements done by myself.
 
 
 
-Example picture:
+Example pictures:
 
 ![Example picture not found](Example.png)
+![Example picture not found](Example_bunny.png)

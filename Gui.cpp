@@ -93,10 +93,10 @@ void GUI::setGui(QString filename){
 
 	// setting ambience and background color
 	std::stringstream color_background, color_ambience;
-	color_background << "background-color: rgb(" << file->background.r << "," << file->background.g << "," << file->background.b << ")";
+	color_background << "background-color: rgb(" << file->background.r*255 << "," << file->background.g*255 << "," << file->background.b*255 << ")";
 	central->findChild<QFrame *>("frameBackground")->setStyleSheet(color_background.str().c_str());
 
-	color_ambience << "background-color: rgb(" << file->ambience.r << "," << file->ambience.g << "," << file->ambience.b << ")";
+	color_ambience << "background-color: rgb(" << file->ambience.r*255 << "," << file->ambience.g*255 << "," << file->ambience.b*255 << ")";
 	central->findChild<QFrame *>("frameAmbience")->setStyleSheet(color_ambience.str().c_str());
 	
 }

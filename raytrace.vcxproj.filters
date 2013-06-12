@@ -79,7 +79,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="ReadMe.txt" />
     <CustomBuild Include="Color.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
