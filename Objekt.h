@@ -7,19 +7,20 @@
 
 class Objekt
 {
-	Surface *surface;
+	Surface* surface;
 	Property *properties;
+	std::vector<Vector> *normals;
 	Vector normal;
-	Vector averaged_normal[3];
 
 public:
-	Objekt(void) : surface(NULL), properties(NULL) {};
-	Objekt(Surface *s, Property *p) : surface(s), properties(p) {};
+	Objekt(void) : properties(NULL) {};
+	Objekt(Surface* s, Property *p) : surface(s), properties(p) {};
+	Objekt(Surface* s, std::vector<Vector> *normals, Property *p) : surface(s), normals(normals), properties(p) {};
 
 	Property* getProperty()  { return properties; };
 	Surface* getSurface()  { return surface; };
 
-	Vector get_normal(Vector &v);
-	void set_normal(Vector v){ normal = v;};
+	Vector get_normal(Vector &v, bool gouraud_shaded);
+	void set_normal(Vector &v){ normal = v;};
 };
 

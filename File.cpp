@@ -15,7 +15,9 @@ extern "C" {
 	extern FILE *yyin;
 	int yyparse();
 
-	File* file = new File();
+	File* file;
+	double maxX, maxY, maxZ, minX, minY, minZ;
+	std::string current_Object_name = "";
 
 	void add_light(char *n, double dirx, double diry, double dirz, double colr, double colg, double colb) {
 		fprintf(stderr,"  adding light %f %f %f %f %f %f\n", dirx, diry, dirz, colr, colg, colb);
@@ -30,8 +32,9 @@ extern "C" {
 		file->properties.push_back(Property(n, Color(ar, ag, ab), Color(r, g, b), s, ss, m));
 	};
 	void add_vertex(double x, double y, double z){
-		fprintf(stderr,"  adding vector %f %f %f\n", x, y, z);
+		//fprintf(stderr,"  adding vector %f %f %f\n", x, y, z);
 		file->vertices.push_back(Vector(x,y,z));
+		file->averaged_normals.push_back(Vector(0,0,0));
 	}
 	void add_index_array(){
 		file->indices.push_back(std::vector<int>());
@@ -65,43 +68,80 @@ extern "C" {
 			exit(1);
 		}
 
+		/*
+		if (current_Object_name != ns){
+			if (current_Object_name != ""){
+				double posX, posY, posZ, radius;
+				posX = (maxX-minX)/2;
+				posY = (maxY-minY)/2;
+				posZ = (maxZ-minZ)/2;
+				radius = std::max(std::max(posX,posY),posZ);
+				//file->objekte.push_back(Objekt(new Surface(ns, 1, 0, 0, -2*posX, 1, 0, -2*posY, 1, -2*posZ, posX*posX + posY*posY + posZ*posZ - radius*radius), new Property()));
+			}
+			current_Object_name = ns;
+		}
+		*/
+
 		if (s->getType() == surface_type::POLY)
 			for (Surface polygon : s->polygons){
 				Surface* s = new Surface(polygon);
-				file->objekte.push_back(Objekt(s,p));
-				/*
-				Vector u = polygon.v2.vsub(polygon.v1);
-				Vector v = polygon.v3.vsub(polygon.v1);
- 
-		        Vector normal = Vector((u.y * v.z - u.z * v.y),
-										(u.z * v.x - u.x * v.z),
-										(u.x * v.y - u.y * v.x));
-
-				file->objekte.back().set_normal()*/
-				fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
+				/*for (int i=0;i<3;i++){
+					maxX = std::max(polygon.vertex_index.at(i).x, maxX);
+					maxY = std::max(polygon.vertex_index.at(i).y, maxY);
+					maxZ = std::max(polygon.vertex_index.at(i).z, maxY);
+				}*/
+				file->objekte.push_back(Objekt(s, &file->averaged_normals, p));
+				//fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
 			}
 		else
 			file->objekte.push_back(Objekt(s, p));
-		file->vertices.clear();
-		file->indices.clear();
-		fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
+		
+		//file->averaged_normals.clear();
+		//fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
 	}
 	void add_polygon(char *n){
 		std::vector<Surface> triangles;
 		while(file->indices.size() > 0){
-			Vector vertices[3];
 
+			int position[3] = {0,1,2};
 
-			// hier normalen berechnen
-			for (int i=0; i < 3; i++)
-				vertices[i] = file->vertices.at(file->indices.back().at(i)-1);
-			triangles.push_back(Surface(vertices[0], vertices[1], vertices[2]));
+			//calculating normal for polygon
+			Vector normal = Vector::calculateNormal(file->vertices.at(file->indices.back().at(position[0])-1), 
+													file->vertices.at(file->indices.back().at(position[1])-1), 
+													file->vertices.at(file->indices.back().at(position[2])-1));
+
+			// adding normal of polygon to averaged_normals
+			for (int i=0; i<3; i++)
+				file->averaged_normals.at(file->indices.back().at(position[i])-1) = file->averaged_normals.at(file->indices.back().at(position[i])-1).vadd(normal);
+
+			// creating triangle
+			triangles.push_back(Surface(&file->vertices.at(file->indices.back().at(position[0])-1),
+										&file->vertices.at(file->indices.back().at(position[1])-1), 
+										&file->vertices.at(file->indices.back().at(position[2])-1),
+										&file->averaged_normals.at(file->indices.back().at(position[0])-1),
+										&file->averaged_normals.at(file->indices.back().at(position[1])-1),
+										&file->averaged_normals.at(file->indices.back().at(position[2])-1)
+										));
 			
 			if (file->indices.back().size() == 4){
-				vertices[0] = file->vertices.at(file->indices.back().at(2)-1);
-				vertices[1] = file->vertices.at(file->indices.back().at(3)-1);
-				vertices[2] = file->vertices.at(file->indices.back().at(0)-1);
-				triangles.push_back(Surface(vertices[0], vertices[1], vertices[2]));
+				int position[3] = {2,3,0};
+				//calculating normal for polygon
+				Vector normal = Vector::calculateNormal(file->vertices.at(file->indices.back().at(position[0])-1), 
+														file->vertices.at(file->indices.back().at(position[1])-1), 
+														file->vertices.at(file->indices.back().at(position[2])-1));
+
+				// adding normal of polygon to averaged_normals
+				for (int i=0; i<3; i++)
+					file->averaged_normals.at(file->indices.back().at(position[i])-1) = file->averaged_normals.at(file->indices.back().at(position[i])-1).vadd(normal);
+
+				// creating triangle
+				triangles.push_back(Surface(&file->vertices.at(file->indices.back().at(position[0])-1),
+											&file->vertices.at(file->indices.back().at(position[1])-1), 
+											&file->vertices.at(file->indices.back().at(position[2])-1),
+											&file->averaged_normals.at(file->indices.back().at(position[0])-1),
+											&file->averaged_normals.at(file->indices.back().at(position[1])-1),
+											&file->averaged_normals.at(file->indices.back().at(position[2])-1)
+											));
 			}
 			file->indices.pop_back();
 		}
@@ -147,6 +187,7 @@ extern "C" {
 }
 
 File* File::openFile(QString filename){
+	file = new File();
 	yyin = fopen(filename.toUtf8().data(),"r");
 	if(yyin == NULL) {
 		fprintf(stderr, "Error: Konnte Datei nicht öffnen\n");

@@ -348,7 +348,7 @@
      <number>0</number>
     </property>
    </widget>
-   <widget class="QPushButton" name="buttonRefresh">
+   <widget class="QPushButton" name="buttonLoad">
     <property name="geometry">
      <rect>
       <x>380</x>
@@ -358,7 +358,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Refresh</string>
+     <string>Load</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEditAspect">
@@ -431,6 +431,35 @@
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkGouraud">
+    <property name="geometry">
+     <rect>
+      <x>356</x>
+      <y>200</y>
+      <width>20</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>200</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Gouraud -Shading:</string>
     </property>
    </widget>
   </widget>

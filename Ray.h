@@ -1,9 +1,10 @@
 #pragma once
+
 #include "Vector.h"
 #include "Color.h"
 #include "Light.h"
 #include "Objekt.h"
-#include "vector"
+#include <vector>
 #include "Surface.h"
 
 class Ray
@@ -17,7 +18,7 @@ public:
 	Ray(void) : direction(), origin(), depth (0) {};
 	Ray(Vector &dir, Vector &orig, int d) : direction(dir), origin(orig), depth (d) {};
 	Ray(Vector &dir, Vector &orig, int d, int maxdepth) : direction(dir), origin(orig), depth(d), maxdepth(maxdepth) {};
-	Color shade(std::vector<Objekt> &, std::vector<Light> &, Color* background, Color* ambience);
+	Color shade(std::vector<Objekt> &objects, std::vector<Light> &lights, Color* background, Color* ambience, bool gouraud_shaded);
 
 	Vector getDirection() { return direction; };
 	Vector getOrigin() { return origin; };

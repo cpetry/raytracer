@@ -22,7 +22,7 @@ extern Color background, ambience;
 /* Rueckgabeparameter: Farbe, die auf diesem Strahl zu sehen ist              */
 /*----------------------------------------------------------------------------*/
 
-Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights, Color* background, Color* ambience)
+Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights, Color* background, Color* ambience, bool gouraud_shaded)
 {
 	Objekt *closest = NULL;
 	Color cur_color; 
@@ -48,7 +48,7 @@ Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights, Color* backgrou
 			cur_color = black;
 	} else {
 		intersection_position = origin.vadd(direction.svmpy(min_t));
-		normal = closest->get_normal(intersection_position);
+		normal = closest->get_normal(intersection_position, gouraud_shaded);
 		reflected_ray = reflect(intersection_position, normal);
 		cur_color = closest->getProperty()->getAmbient().outprodc(*ambience);  // black statt Globales Ambient -> nun ambient
 
@@ -70,7 +70,7 @@ Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights, Color* backgrou
 		}
 
 		if (depth < this->maxdepth) {
-			Color mirror_color = reflected_ray.shade(objects, lights, background, ambience);
+			Color mirror_color = reflected_ray.shade(objects, lights, background, ambience, gouraud_shaded);
 			mirror_color = mirror_color.scmpy(closest->getProperty()->getMirror());
 			cur_color = mirror_color.addcolor(cur_color);
 		}
@@ -199,8 +199,8 @@ double Ray::intersect(Objekt &obj){
 
 double Ray::intersectPolygon(Objekt &obj){
 	Surface* polygon = obj.getSurface();
-	Vector u = polygon->v2.vsub(polygon->v1);
-	Vector v = polygon->v3.vsub(polygon->v1);
+	Vector u = polygon->vertex_index[1].vsub(polygon->vertex_index[0]);		// V1->V2
+	Vector v = polygon->vertex_index[2].vsub(polygon->vertex_index[0]);		// V1->V3
 	Vector w = u.cross(v);
 	Vector w0;
 	
@@ -209,23 +209,22 @@ double Ray::intersectPolygon(Objekt &obj){
 
 	Vector rPos = this->getOrigin();
 	Vector rDir = this->getDirection();
-	w0 = rPos.vsub(polygon->v1);
+	w0 = rPos.vsub(polygon->vertex_index[0]);		// Ray -> V1
 
 	float first = -w.dot(w0);
 	float second = w.dot(rDir);
-	if (fabs(second) < 0.000001) // ray parallel to triangle plane
-		if (first == 0)     // ray disjoint from plane
-			return -1.0;   // ray lies triangle plane
+	if (fabs(second) < 0.000001)	// ray parallel to triangle plane
+		if (first == 0)				// ray disjoint from plane
+			return -1.0;			// ray lies triangle plane
 		else
-			return -1.0;	// ray disjoint from plane
+			return -1.0;			// ray disjoint from plane
 
-	float r = first/second;
+	float r = first/second;			// distance to interPoint
 	if (r < 0.0 || second == 0 )
 		return -1.0;
 	
 	
-	Vector interPoint = this->getDirection().svmpy(r).vadd(this->getOrigin());
-	//Vector interPoint = this->getOrigin().vadd(this->getDirection()).svmpy(r);
+	Vector interPoint = this->getDirection().svmpy(r).vadd(this->getOrigin());	//calc interPoint
 	Vector normal = w;	// normale beim erstellen berechnen -> averaged normals
 
 	float uu,uv,vv,wu,wv,div;
@@ -233,25 +232,31 @@ double Ray::intersectPolygon(Objekt &obj){
 	uu = u.dot(u);
 	uv = u.dot(v);
 	vv = v.dot(v);
-	w = interPoint.vsub(polygon->v1);
+	w = interPoint.vsub(polygon->vertex_index[0]);		// V1 -> interPoint
 	wu = w.dot(u);
 	wv = w.dot(v);
 	div = (uv * uv - uu * vv);
 
-	float s = (uv * wv - vv * wu) / div;
+	float s = (uv * wv - vv * wu) / div;				// V1 * 
 	if (s < 0.0 || s > 1.0)
 		return -1.0;
 	float t = (uv * wu - uu * wv) / div;
 	if (t < 0.0 || (s+t) > 1.0)
 		return -1.0;
 
+	float y = 1.0f - s - t;
+
 	// texture coordinates, still testing!
 	//float ax = (this->texb.r - this->texa.r) * s;
 	//float ay = (this->texc.g - this->texa.g) * t;
 	//local.setTexCoords(vec2(ax,ay));
 
-	//local.setPos(interPoint);
+	Vector normal1 = polygon->average_normals[0]->normalize().svmpy(y);
+	Vector normal2 = polygon->average_normals[1]->normalize().svmpy(s);
+	Vector normal3 = polygon->average_normals[2]->normalize().svmpy(t);
+	normal = normal1.vadd(normal2).vadd(normal3).normalize();
+
 	obj.set_normal(normal);
-	//thit = r;
+	
 	return ((0.001 < r) ? r : -1.0);
 }

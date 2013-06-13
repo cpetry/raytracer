@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Qthread"
 #include "Image.h"
 
@@ -5,6 +7,7 @@ class RenderThread : public QThread
 {
     Q_OBJECT
 public:
+	RenderThread(){};
 	RenderThread(Image* img, int update_precentage){
 		this->img = new Image(img->file->resolutionX, img->file->resolutionY, img->file);
 		*this->img = *img;

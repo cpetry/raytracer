@@ -10,7 +10,7 @@
 /* Rueckgabeparameter: Berechneter Normalenvektor                             */
 /*----------------------------------------------------------------------------*/
 
-Vector Objekt::get_normal(Vector &v)
+Vector Objekt::get_normal(Vector &v, bool gouraud_shaded)
 {
 	Vector normal;
 
@@ -22,15 +22,14 @@ Vector Objekt::get_normal(Vector &v)
 	}
 	
 	else if (surface->getType() == surface_type::POLYGON){
-		normal = this->normal;
+		if (!gouraud_shaded){
+			Vector u = surface->vertex_index[1].vsub(surface->vertex_index[0]);		// V1->V2
+			Vector v = surface->vertex_index[2].vsub(surface->vertex_index[0]);		// V1->V3
+			Vector w = u.cross(v);
+			return w.normalize();
+		}
 		
-		/*
-		Vector u = surface->v2.vsub(surface->v1);
-        Vector v = surface->v3.vsub(surface->v1);
- 
-        normal = Vector((u.y * v.z - u.z * v.y),
-						(u.z * v.x - u.x * v.z),
-						(u.x * v.y - u.y * v.x));*/
+		normal = this->normal;
 	}
 
 	return normal.normalize();

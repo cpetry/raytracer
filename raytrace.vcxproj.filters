@@ -139,4 +139,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="data\bunny_scaled.data">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

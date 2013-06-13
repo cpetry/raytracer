@@ -13,7 +13,7 @@ ambience  	0.0     0.2     0.3
 # object default
 #
 
-object g1 sphere 0.0 -30.0 -30.0 30.0
+object g1 sphere 0.0 -20.0 -70.0 60.0
 
 object g2 poly
 vertex -11.27868 0.58644 16.23055
@@ -7492,16 +7492,16 @@ polygon 1416 1687 2503
 
 # Oberflaechenbeschaffenheit 3
 property p1
-ambient  0.0    0.0     0.2
+ambient  0.0    0.0     0.4
 diffuse  0.1	0.6	    0.1
 specular 1.0	4
 mirror	 0.8
 
 # Oberflaechenbeschaffenheit 1
 property p2
-ambient  0.0    0.0     0.4
+ambient  0.2    0.2     0.2
 diffuse  0.4	0.3	    0.3
-specular 0.3	4
+specular 0.6	4
 mirror	 0.2
 
 
@@ -7516,7 +7516,7 @@ direction  0.6	 0.7	 0.1
 color	   0.2	 0.2	 0.2
 
 
-#bunny
-object	 g1	 p1
-object	 g2	 p2
+
+object	 g1	 p1 #sphere
+object	 g2	 p2	#bunny
 

@@ -2,6 +2,8 @@
 
 #include <QtWidgets/qmainwindow>
 #include <QtWidgets\qfiledialog>
+#include <qthread.h>
+#include "RenderThread.h"
 #include "ui_GUI.h"
 
 class File;
@@ -29,11 +31,12 @@ public slots:
 	void slot_updatePicture(Image* pic, int percentage, float time_spent);
 	void slot_ButtonRender();
 	void slot_ButtonSearch();
-	void slot_ButtonRefresh();
+	void slot_ButtonLoad();
 	void slot_ChooseBackground();
 	void slot_ChooseAmbience();
 	void slot_ChooseSuperSampling(const QString & text);
 	void slot_ChooseAspect(const QString & text);
+	void slot_CheckGouraud(int state);
 	void slot_EditedTextAspect(const QString & text);
 	void slot_SaveImage();
 	void slot_isRendering();

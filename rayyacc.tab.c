@@ -1678,13 +1678,13 @@ yyreduce:
 
     {
 	    add_vertex((yyvsp[(2) - (4)].floatval), (yyvsp[(3) - (4)].floatval), (yyvsp[(4) - (4)].floatval));
-		printf("vertex %f %f %f\n", (yyvsp[(2) - (4)].floatval), (yyvsp[(3) - (4)].floatval), (yyvsp[(4) - (4)].floatval)); 
+		//printf("vertex %f %f %f\n", $2, $3, $4); 
 	  ;}
     break;
 
   case 46:
 
-    { printf("polygon\n"); 
+    { //printf("polygon\n"); 
 		add_index_array();
 	  ;}
     break;
@@ -1693,7 +1693,7 @@ yyreduce:
 
     { 
 	    
-		printf("\n");
+		//printf("\n");
 	  ;}
     break;
 
@@ -1701,7 +1701,7 @@ yyreduce:
 
     {
 	  add_index((yyvsp[(1) - (1)].intval)); 
-	  printf("polygon idx %d\n", (yyvsp[(1) - (1)].intval)); 
+	  //printf("polygon idx %d\n", $1); 
 	;}
     break;
 

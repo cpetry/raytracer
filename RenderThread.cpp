@@ -46,7 +46,7 @@ void RenderThread::renderPicture(){
 				float beta  = std::tanf (img->file->fovy / 180 * 3.1415926 / 2.0f) * (((Yresolution  / 2.0f) - fragmenty) / (Yresolution / 2.0f));
 				Ray	ray(u.svmpy(alpha).vadd(v.svmpy(beta)).vsub(w).normalize(), img->file->eye, 0, img->file->bounces);
 
-				color = color.addcolor(ray.shade(img->file->objekte, img->file->lights, &img->file->background, &img->file->ambience).scmpy(coef));
+				color = color.addcolor(ray.shade(img->file->objekte, img->file->lights, &img->file->background, &img->file->ambience, img->file->gouraud_shaded).scmpy(coef));
 			}
 			
 			this->img->set(sx, scanline,

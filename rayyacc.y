@@ -283,7 +283,7 @@ one_vertex
     : VERTEX realVal realVal realVal
       {
 	    add_vertex($2, $3, $4);
-		printf("vertex %f %f %f\n", $2, $3, $4); 
+		//printf("vertex %f %f %f\n", $2, $3, $4); 
 	  }
     ;
 
@@ -298,14 +298,14 @@ polygons
 
 one_polygon
     : POLY  
-      { printf("polygon\n"); 
+      { //printf("polygon\n"); 
 		add_index_array();
 	  }
 	  
       indices
       { 
 	    
-		printf("\n");
+		//printf("\n");
 	  }
     ;
 
@@ -318,7 +318,7 @@ one_index
 	: index
 	{
 	  add_index($1); 
-	  printf("polygon idx %d\n", $1); 
+	  //printf("polygon idx %d\n", $1); 
 	}
 	;
 
