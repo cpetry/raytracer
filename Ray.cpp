@@ -226,7 +226,7 @@ double Ray::intersectPolygon(Objekt &obj){
 	
 	Vector interPoint = this->getDirection().svmpy(r).vadd(this->getOrigin());
 	//Vector interPoint = this->getOrigin().vadd(this->getDirection()).svmpy(r);
-	Vector normal = w;
+	Vector normal = w;	// normale beim erstellen berechnen -> averaged normals
 
 	float uu,uv,vv,wu,wv,div;
 

@@ -10,6 +10,8 @@ class Objekt
 	Surface *surface;
 	Property *properties;
 	Vector normal;
+	Vector averaged_normal[3];
+
 public:
 	Objekt(void) : surface(NULL), properties(NULL) {};
 	Objekt(Surface *s, Property *p) : surface(s), properties(p) {};

@@ -67,7 +67,17 @@ extern "C" {
 
 		if (s->getType() == surface_type::POLY)
 			for (Surface polygon : s->polygons){
-				file->objekte.push_back(Objekt(new Surface(polygon), p));
+				Surface* s = new Surface(polygon);
+				file->objekte.push_back(Objekt(s,p));
+				/*
+				Vector u = polygon.v2.vsub(polygon.v1);
+				Vector v = polygon.v3.vsub(polygon.v1);
+ 
+		        Vector normal = Vector((u.y * v.z - u.z * v.y),
+										(u.z * v.x - u.x * v.z),
+										(u.x * v.y - u.y * v.x));
+
+				file->objekte.back().set_normal()*/
 				fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
 			}
 		else
@@ -81,6 +91,8 @@ extern "C" {
 		while(file->indices.size() > 0){
 			Vector vertices[3];
 
+
+			// hier normalen berechnen
 			for (int i=0; i < 3; i++)
 				vertices[i] = file->vertices.at(file->indices.back().at(i)-1);
 			triangles.push_back(Surface(vertices[0], vertices[1], vertices[2]));

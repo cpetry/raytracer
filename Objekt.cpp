@@ -22,7 +22,9 @@ Vector Objekt::get_normal(Vector &v)
 	}
 	
 	else if (surface->getType() == surface_type::POLYGON){
-		normal = this->normal;/*
+		normal = this->normal;
+		
+		/*
 		Vector u = surface->v2.vsub(surface->v1);
         Vector v = surface->v3.vsub(surface->v1);
  
