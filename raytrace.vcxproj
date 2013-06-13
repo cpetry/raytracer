@@ -402,7 +402,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Qt5Version_x0020_Win32="Qt5 x86" />
+      <UserProperties Qt5Version_x0020_Win32="Qt5" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
