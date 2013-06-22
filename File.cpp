@@ -16,7 +16,6 @@ extern "C" {
 	int yyparse();
 
 	File* file;
-	double maxX, maxY, maxZ, minX, minY, minZ;
 	std::string current_Object_name = "";
 
 	void add_light(char *n, double dirx, double diry, double dirz, double colr, double colg, double colb) {
@@ -66,35 +65,45 @@ extern "C" {
 		if(p == NULL) {
 			fprintf(stderr, "Property not found: %s\n", np);
 			exit(1);
-		}
+		}		
 
-		/*
-		if (current_Object_name != ns){
-			if (current_Object_name != ""){
-				double posX, posY, posZ, radius;
-				posX = (maxX-minX)/2;
-				posY = (maxY-minY)/2;
-				posZ = (maxZ-minZ)/2;
-				radius = std::max(std::max(posX,posY),posZ);
-				//file->objekte.push_back(Objekt(new Surface(ns, 1, 0, 0, -2*posX, 1, 0, -2*posY, 1, -2*posZ, posX*posX + posY*posY + posZ*posZ - radius*radius), new Property()));
-			}
-			current_Object_name = ns;
-		}
-		*/
+		if (s->getType() == surface_type::POLY){
+			double maxX=s->polygons.at(0).vertex_index.at(0).x;
+			double maxY=s->polygons.at(0).vertex_index.at(0).y; 
+			double maxZ=s->polygons.at(0).vertex_index.at(0).z; 
+			double minX=maxX;
+			double minY=maxY;
+			double minZ=maxZ;
 
-		if (s->getType() == surface_type::POLY)
 			for (Surface polygon : s->polygons){
 				Surface* s = new Surface(polygon);
-				/*for (int i=0;i<3;i++){
+				for (int i=0;i<3;i++){
 					maxX = std::max(polygon.vertex_index.at(i).x, maxX);
 					maxY = std::max(polygon.vertex_index.at(i).y, maxY);
-					maxZ = std::max(polygon.vertex_index.at(i).z, maxY);
-				}*/
+					maxZ = std::max(polygon.vertex_index.at(i).z, maxZ);
+
+					minX = std::min(polygon.vertex_index.at(i).x, minX);
+					minY = std::min(polygon.vertex_index.at(i).y, minY);
+					minZ = std::min(polygon.vertex_index.at(i).z, minZ);
+				}
 				file->objekte.push_back(Objekt(s, &file->averaged_normals, p));
 				//fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
 			}
-		else
+		
+			double posX, posY, posZ, radius;
+			posX = (maxX+minX)/2;
+			posY = (maxY+minY)/2;
+			posZ = (maxZ+minZ)/2;
+			radius = Vector(maxX, maxY, maxZ).vsub(Vector(posX,posY,posZ)).veclength();
+			file->bounding_volumes.push_back(Objekt(new Surface(ns, 1, 0, 0, -2*posX, 1, 0, -2*posY, 1, -2*posZ, posX*posX + posY*posY + posZ*posZ - radius*radius), new Property()));			
+		}
+
+		else{
 			file->objekte.push_back(Objekt(s, p));
+			file->bounding_volumes.push_back(Objekt(s, new Property()));
+		}
+
+		
 		
 		//file->averaged_normals.clear();
 		//fprintf(stderr, "  adding object: surface %s, property %s\n", ns, np);
@@ -115,7 +124,7 @@ extern "C" {
 				file->averaged_normals.at(file->indices.back().at(position[i])-1) = file->averaged_normals.at(file->indices.back().at(position[i])-1).vadd(normal);
 
 			// creating triangle
-			triangles.push_back(Surface(&file->vertices.at(file->indices.back().at(position[0])-1),
+			triangles.push_back(Surface(n, &file->vertices.at(file->indices.back().at(position[0])-1),
 										&file->vertices.at(file->indices.back().at(position[1])-1), 
 										&file->vertices.at(file->indices.back().at(position[2])-1),
 										&file->averaged_normals.at(file->indices.back().at(position[0])-1),
@@ -135,7 +144,7 @@ extern "C" {
 					file->averaged_normals.at(file->indices.back().at(position[i])-1) = file->averaged_normals.at(file->indices.back().at(position[i])-1).vadd(normal);
 
 				// creating triangle
-				triangles.push_back(Surface(&file->vertices.at(file->indices.back().at(position[0])-1),
+				triangles.push_back(Surface(n, &file->vertices.at(file->indices.back().at(position[0])-1),
 											&file->vertices.at(file->indices.back().at(position[1])-1), 
 											&file->vertices.at(file->indices.back().at(position[2])-1),
 											&file->averaged_normals.at(file->indices.back().at(position[0])-1),

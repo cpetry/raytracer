@@ -1,11 +1,14 @@
 #pragma once
 
+#include <vector>
+
 #include "Vector.h"
 #include "Color.h"
-#include "Light.h"
-#include "Objekt.h"
-#include <vector>
-#include "Surface.h"
+
+class File;
+class Surface;
+class Light;
+class Objekt;
 
 class Ray
 {
@@ -18,7 +21,7 @@ public:
 	Ray(void) : direction(), origin(), depth (0) {};
 	Ray(Vector &dir, Vector &orig, int d) : direction(dir), origin(orig), depth (d) {};
 	Ray(Vector &dir, Vector &orig, int d, int maxdepth) : direction(dir), origin(orig), depth(d), maxdepth(maxdepth) {};
-	Color shade(std::vector<Objekt> &objects, std::vector<Light> &lights, Color* background, Color* ambience, bool gouraud_shaded);
+	Color shade(File* file);
 
 	Vector getDirection() { return direction; };
 	Vector getOrigin() { return origin; };

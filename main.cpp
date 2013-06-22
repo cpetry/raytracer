@@ -3,8 +3,6 @@
 #include <qmainwindow>
 #include <qapplication>
 
-#include <stdio.h>
-
 #include "GUI.h"
 
 

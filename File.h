@@ -20,6 +20,7 @@ public:
 	std::vector<Vector> averaged_normals;
 	std::vector<std::vector<int>> indices;
 	std::vector<Objekt> objekte;
+	std::vector<Objekt> bounding_volumes;
 	std::vector<Light> lights;
 	int resolutionX, resolutionY, bounces, super_sampling;
 	double fovy, aspect;

@@ -1,13 +1,10 @@
-#include "StdAfx.h"
+#include "File.h"
 #include "Ray.h"
-#include "math.h"
-#include "float.h"
+
+#include <math.h>
+#include <float.h>
 #include <vector>
 
-
-using namespace std;
-
-extern Color background, ambience;
 /*----------------------------------------------------------------------------*/
 /* shade   arbeitet den folgenden Algorithmus ab:                             */
 /*   Schneide den Sichtstrahl mit jedem Objekt. Merke, welches Objekt den     */
@@ -22,7 +19,7 @@ extern Color background, ambience;
 /* Rueckgabeparameter: Farbe, die auf diesem Strahl zu sehen ist              */
 /*----------------------------------------------------------------------------*/
 
-Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights, Color* background, Color* ambience, bool gouraud_shaded)
+Color Ray::shade(File* file)
 {
 	Objekt *closest = NULL;
 	Color cur_color; 
@@ -32,35 +29,61 @@ Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights, Color* backgrou
 	Ray lv, reflected_ray;
 	bool something_intersected = false;
 
-	for (vector<Objekt>::iterator o = objects.begin(); o != objects.end(); ++o) {
+	std::vector<int> volumes_hit;
 
+	for (std::vector<Objekt>::iterator o = file->bounding_volumes.begin(); o != file->bounding_volumes.end(); ++o) {
 		t = intersect(*o);
-		if (0.0 < t && t < min_t) {
-			min_t = t;
-			closest = &(*o);
+		if (0.0 < t) {
+			volumes_hit.push_back(o->getSurface()->getNumber());
+		}
+	}
+	
+
+	for (std::vector<Objekt>::iterator o = file->objekte.begin(); o != file->objekte.end(); ++o) {
+		for (std::vector<int>::iterator s = volumes_hit.begin(); s != volumes_hit.end(); ++s) {
+			if (o->getSurface()->getNumber() == *s){
+				t = intersect(*o);
+				if (0.0 < t && t < min_t) {
+					min_t = t;
+					closest = &(*o);
+				}
+			}
 		}
 	}
 
+	volumes_hit.clear();
+
 	if (closest == NULL) {
 		if (depth == 0)
-			cur_color = *background; //background_color;
+			cur_color = file->background; //background_color;
 		else
 			cur_color = black;
 	} else {
 		intersection_position = origin.vadd(direction.svmpy(min_t));
-		normal = closest->get_normal(intersection_position, gouraud_shaded);
+		normal = closest->get_normal(intersection_position, file->gouraud_shaded);
 		reflected_ray = reflect(intersection_position, normal);
-		cur_color = closest->getProperty()->getAmbient().outprodc(*ambience);  // black statt Globales Ambient -> nun ambient
+		cur_color = closest->getProperty()->getAmbient().outprodc(file->ambience);  // black statt Globales Ambient -> nun ambient
 
-		for (vector<Light>::iterator li = lights.begin(); li != lights.end(); ++li) {
+		for (std::vector<Light>::iterator li = file->lights.begin(); li != file->lights.end(); ++li) {
 			lv.setDirection(li->getDirection());
 			lv.setOrigin(intersection_position);
 			something_intersected = false;
-			for (vector<Objekt>::iterator o = objects.begin(); o != objects.end(); ++o) {
+
+			for (std::vector<Objekt>::iterator o = file->bounding_volumes.begin(); o != file->bounding_volumes.end(); ++o) {
 				t = lv.intersect(*o);
-				if (t > 0.0) {
-					something_intersected = true;
-					break;
+				if (0.0 < t) {
+					volumes_hit.push_back(o->getSurface()->getNumber());
+				}
+			}
+			for (std::vector<Objekt>::iterator o = file->objekte.begin(); o != file->objekte.end(); ++o) {
+				for (std::vector<int>::iterator s = volumes_hit.begin(); s != volumes_hit.end(); ++s) {
+					if (o->getSurface()->getNumber() == *s){
+						t = lv.intersect(*o);
+						if (t > 0.0) {
+							something_intersected = true;
+							break;
+						}
+					}
 				}
 			}
 			if (something_intersected == false) {
@@ -70,7 +93,7 @@ Color Ray::shade(vector<Objekt> &objects, vector<Light> &lights, Color* backgrou
 		}
 
 		if (depth < this->maxdepth) {
-			Color mirror_color = reflected_ray.shade(objects, lights, background, ambience, gouraud_shaded);
+			Color mirror_color = reflected_ray.shade(file);
 			mirror_color = mirror_color.scmpy(closest->getProperty()->getMirror());
 			cur_color = mirror_color.addcolor(cur_color);
 		}

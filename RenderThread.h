@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Qthread"
+#include <Qthread>
+
 #include "Image.h"
 
 class RenderThread : public QThread

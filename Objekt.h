@@ -1,8 +1,11 @@
 #pragma once
-#include "Surface.h"
-#include "Property.h"
+
+#include <vector>
+
 #include "Vector.h"
-#include "vector"
+
+class Property;
+class Surface;
 
 
 class Objekt

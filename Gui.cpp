@@ -62,15 +62,15 @@ void GUI::init(){
 	}
 	
 	// Connecting Signals and Slots
-	connect(this->findChild<QPushButton *>("buttonRender"), SIGNAL(clicked()), this, SLOT(slot_ButtonRender()));
-	connect(this->findChild<QPushButton *>("buttonSearch"), SIGNAL(clicked()), this, SLOT(slot_ButtonSearch()));
-	connect(this->findChild<QPushButton *>("buttonLoad"), SIGNAL(clicked()), this, SLOT(slot_ButtonLoad()));
-	connect(this->findChild<QToolButton *>("buttonBackground"), SIGNAL(clicked()), this, SLOT(slot_ChooseBackground()));
-	connect(this->findChild<QToolButton *>("buttonAmbience"), SIGNAL(clicked()), this, SLOT(slot_ChooseAmbience()));
-	connect(this->findChild<QCheckBox *>("checkGouraud"), SIGNAL(stateChanged(int)), this, SLOT(slot_CheckGouraud(int)));
-	connect(this->findChild<QLineEdit *>("lineEditAspect"), SIGNAL(textEdited(QString)), this, SLOT(slot_EditedTextAspect(QString)));
-	connect(combobox_supersampling, SIGNAL(activated(QString)), this, SLOT(slot_ChooseSuperSampling(QString)));
-	connect(combobox_aspect, SIGNAL(activated(QString)), this, SLOT(slot_ChooseAspect(QString)));
+	connect(this->findChild<QPushButton *>("buttonRender"),		&QPushButton::clicked,			this, &GUI::slot_ButtonRender);
+	connect(this->findChild<QPushButton *>("buttonSearch"),		&QPushButton::clicked,			this, &GUI::slot_ButtonSearch);
+	connect(this->findChild<QPushButton *>("buttonLoad"),		&QPushButton::clicked,			this, &GUI::slot_ButtonLoad);
+	connect(this->findChild<QToolButton *>("buttonBackground"), &QToolButton::clicked,			this, &GUI::slot_ChooseBackground);
+	connect(this->findChild<QToolButton *>("buttonAmbience"),	&QToolButton::clicked,			this, &GUI::slot_ChooseAmbience);
+	connect(this->findChild<QCheckBox *>("checkGouraud"),		&QCheckBox::stateChanged,		this, &GUI::slot_CheckGouraud);
+	connect(this->findChild<QLineEdit *>("lineEditAspect"),		&QLineEdit::textEdited,			this, &GUI::slot_EditedTextAspect);
+	connect(combobox_supersampling,								&QComboBox::currentTextChanged,	this, &GUI::slot_ChooseSuperSampling);
+	connect(combobox_aspect,									&QComboBox::currentTextChanged,	this, &GUI::slot_ChooseAspect);
 }
 
 /*
@@ -127,24 +127,32 @@ void GUI::setFile(){
 //////////
 
 void GUI::slot_ButtonRender(){
-	setFile(); // setting intern file to current settings
+	FILE *yyin;
+	yyin = fopen(this->findChild<QLineEdit *>("lineEditFilename")->text().toUtf8().data(),"r");
+	if(yyin == NULL || this->file == NULL) {
+		return;
+	}
 
-	if (this->file != NULL && !this->isRendering){
+	if (this != NULL && this->file != NULL && !this->isRendering){
+		setFile(); // setting intern file to current settings
+
 		Image* bild = new Image(this->file->resolutionX, this->file->resolutionY, this->file);
 
 		int update_precentage = this->centralWidget()->findChild<QLineEdit *>("lineEditUpdatePercentage")->text().toInt();
 
-		RenderThread* render = new RenderThread(bild, update_precentage);
-		connect(render, &RenderThread::resultReady, this, &GUI::slot_updatePicture);
-		connect(render, SIGNAL(finished()), render, SLOT(deleteLater()));
-		connect(render, SIGNAL(finished()), this, SLOT(slot_isRendering()));
+		renderThread = new RenderThread(bild, update_precentage);
+		connect(renderThread, &RenderThread::resultReady, this, &GUI::slot_updatePicture);
+		connect(renderThread, SIGNAL(finished()), renderThread, SLOT(deleteLater()));
+		connect(renderThread, SIGNAL(finished()), this, SLOT(slot_isRendering()));
 
-		this->findChild<QPushButton *>("buttonRender")->setDisabled(true);
+		this->findChild<QPushButton *>("buttonRender")->setText("Stop");
 		this->isRendering = true;
-		render->start();	
+		renderThread->start();
+		renderThread->setPriority(QThread::Priority::TimeCriticalPriority);
 	}
-	else{
-
+	else if (renderThread != NULL){
+		renderThread->quit();
+		this->findChild<QPushButton *>("buttonRender")->setText("Render");
 	}
 }
 
@@ -168,7 +176,7 @@ void GUI::slot_ButtonLoad(){
 
 void GUI::slot_isRendering(){
 	this->isRendering = false;
-	this->findChild<QPushButton *>("buttonRender")->setDisabled(false);
+	this->findChild<QPushButton *>("buttonRender")->setText("Render");
 }
 
 void GUI::slot_ChooseBackground(){

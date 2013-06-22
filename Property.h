@@ -1,6 +1,9 @@
 #pragma once
-#include "Color.h"
+
 #include "string"
+
+#include "Color.h"
+
 
 class Property
 {

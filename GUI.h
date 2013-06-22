@@ -1,8 +1,9 @@
 #pragma once
 
-#include <QtWidgets/qmainwindow>
-#include <QtWidgets\qfiledialog>
-#include <qthread.h>
+#include <qmainwindow>
+#include <qfiledialog>
+#include <qthread>
+
 #include "RenderThread.h"
 #include "ui_GUI.h"
 
@@ -14,6 +15,7 @@ class GUI : public QMainWindow
 	Q_OBJECT
 
 public:
+	RenderThread* renderThread;
 	File* file;
 	QImage* img;
 	bool isRendering;
