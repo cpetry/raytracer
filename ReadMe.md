@@ -9,7 +9,10 @@ Qt5 GUI, enhancements done by myself.
 
 **Features:**
 
-- Data file loading (with several parameters)
+- SuperSampling
+- Bounding Volumes
+- Gouraud Shading
+- Data file loading (scene-files)
  - Quadrics
  - Spheres
  - Polygons
@@ -20,11 +23,6 @@ Qt5 GUI, enhancements done by myself.
 - Background color
 - Ambient lighting
 - Number of possible lightbounces
-- SuperSampling
-
-**possible overriding:**
-
-
 
 Example pictures:
 

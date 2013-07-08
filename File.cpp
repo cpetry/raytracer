@@ -9,8 +9,6 @@
 #include "Objekt.h"
 #include "Light.h"
 
-Color background, ambience;
-
 extern "C" {
 	extern FILE *yyin;
 	int yyparse();
@@ -206,9 +204,6 @@ File* File::openFile(QString filename){
 	fclose (yyin);
 	
 	*this = *file;
-	
-	background = this->background;
-	ambience = this->ambience;
 
 	return file;
 }
