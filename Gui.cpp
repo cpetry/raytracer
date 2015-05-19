@@ -4,27 +4,27 @@
 
 #include <sstream>
 
-#include <Qt3D/qglview.h>
-#include "Qt3D/qglbuilder.h"
-#include "qgraphicsview.h"
-#include <QGraphicsPixmapItem>
-#include <QMessageBox>
-#include <QAction>
-#include <Qgridlayout>
-#include <QCloseEvent>
-#include <QTextBrowser>
-#include <QScreen>
-#include <QColorDialog>
-#include <Qbrush>
-#include <QComboBox>
-#include <QMenuBar>
-#include <QStatusBar>
-#include <qcheckbox.h>
+//#include <Qt3D/qglview.h>
+//#include "Qt3D/qglbuilder.h"
+#include "QtWidgets/qgraphicsview.h"
+#include <QtWidgets/QGraphicsPixmapItem>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QAction>
+#include <QtWidgets/Qgridlayout>
+#include <QtGui/QCloseEvent>
+#include <QtWidgets/QTextBrowser>
+#include <QtGui/QScreen>
+#include <QtWidgets/QColorDialog>
+#include <QtGui/Qbrush>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/qcheckbox.h>
 
 #include "File.h"
 #include "Image.h"
 #include "RenderThread.h"
-#include <qsizepolicy>
+#include <QtWidgets/qsizepolicy>
 
 GUI::GUI(QWidget *parent) : QMainWindow(parent)
 {

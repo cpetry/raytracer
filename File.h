@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 
-#include <QString>
+#include <QtCore/QString>
 
 #include "Color.h"
 #include "Surface.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Qthread>
+#include <QtCore/Qthread>
 
 #include "Image.h"
 

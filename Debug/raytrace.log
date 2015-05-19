@@ -1,5 +1,5 @@
-﻿Build started 22.06.2013 20:22:26.
-     1>Project "C:\Users\Perty\raytrace\raytrace.vcxproj" on node 2 (Build target(s)).
+﻿Build started 28.12.2013 12:56:12.
+     1>Project "C:\Projekte\raytracer\raytrace.vcxproj" on node 2 (Build target(s)).
      1>PreBuildEvent:
          cd bin && flex -o..\lex.yy.c ..\raylex.l && bison -l -o ..\rayyacc.tab.c ..\rayyacc.y
          :VCEnd
@@ -8,31 +8,35 @@
          ..\\rayyacc.y:72.35-42: Warnung: Nicht-Terminal nutzlos in Grammatik: angleVal
          ..\\rayyacc.y:445.12-453.5: Warnung: Regeln nutzlos in Grammatik: angleVal: realVal
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Qt\include /IC:\Qt\include\QtCore /IC:\Qt\include\QtGui /IC:\Qt\include\QtWidgets /I.\GeneratedFiles /IC:\Qt\include\QtOpenGL /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D _DEBUG /D _CONSOLE /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D QT_OPENGL_LIB /D QT_DLL /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Ray.cpp
-         Ray.cpp
-     1>c:\users\perty\raytrace\ray.cpp(221): warning C4715: 'Ray::intersect' : not all control paths return a value
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Qt\include /IC:\Qt\include\QtCore /IC:\Qt\include\QtGui /IC:\Qt\include\QtWidgets /I.\GeneratedFiles /IC:\Qt\include\QtOpenGL /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D _DEBUG /D _CONSOLE /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D QT_OPENGL_LIB /D QT_DLL /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt rayyacc.tab.c
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Projekte\raytracer\Qt5 /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D _DEBUG /D _CONSOLE /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D QT_OPENGL_LIB /D QT_DLL /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt rayyacc.tab.c
          rayyacc.tab.c
-     1>c:\users\perty\raytrace\rayyacc.tab.c(1672): warning C4013: 'add_polygon' undefined; assuming extern returning int
-     1>c:\users\perty\raytrace\rayyacc.tab.c(1680): warning C4013: 'add_vertex' undefined; assuming extern returning int
-     1>c:\users\perty\raytrace\rayyacc.tab.c(1688): warning C4013: 'add_index_array' undefined; assuming extern returning int
-     1>c:\users\perty\raytrace\rayyacc.tab.c(1703): warning C4013: 'add_index' undefined; assuming extern returning int
+     1>c:\projekte\raytracer\rayyacc.tab.c(1672): warning C4013: 'add_polygon' undefined; assuming extern returning int
+     1>c:\projekte\raytracer\rayyacc.tab.c(1680): warning C4013: 'add_vertex' undefined; assuming extern returning int
+     1>c:\projekte\raytracer\rayyacc.tab.c(1688): warning C4013: 'add_index_array' undefined; assuming extern returning int
+     1>c:\projekte\raytracer\rayyacc.tab.c(1703): warning C4013: 'add_index' undefined; assuming extern returning int
+       PreLinkEvent:
+         CALL "C:\Projekte\raytracer\create_moc_files.bat"
+         CALL "C:\Projekte\raytracer\create_ui_files.bat"
+         :VCEnd
+         Moc-File is up to date 
+         Moc-File is up to date 
+         ui-File is up to date 
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Perty\raytrace\Debug\raytrace.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Qt/lib Qt5Cored.lib Qt5Guid.lib Qt5Widgetsd.lib Qt5OpenGLd.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Perty\raytrace\Debug\raytrace.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Perty\raytrace\Debug\raytrace.lib" /MACHINE:X86 Debug\Color.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Projekte\raytracer\Debug\raytrace.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Projekte\raytracer\Qt5 Qt5Cored.lib Qt5Guid.lib Qt5Widgetsd.lib Qt5OpenGLd.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Projekte\raytracer\Debug\raytrace.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Projekte\raytracer\Debug\raytrace.lib" /MACHINE:X86 Debug\Color.obj
          Debug\File.obj
-         Debug\moc_GUI.obj
-         Debug\moc_RenderThread.obj
          Debug\Gui.obj
          Debug\Image.obj
+         Debug\moc_GUI.obj
+         Debug\moc_RenderThread.obj
          Debug\Objekt.obj
          Debug\Ray.obj
          Debug\main.obj
          Debug\rayyacc.tab.obj
          Debug\RenderThread.obj
          Debug\Vector.obj
-         raytrace.vcxproj -> C:\Users\Perty\raytrace\Debug\raytrace.exe
-     1>Done Building Project "C:\Users\Perty\raytrace\raytrace.vcxproj" (Build target(s)).
+         raytrace.vcxproj -> C:\Projekte\raytracer\Debug\raytrace.exe
+     1>Done Building Project "C:\Projekte\raytracer\raytrace.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.53
+Time Elapsed 00:00:01.12

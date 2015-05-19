@@ -1,8 +1,8 @@
 #pragma once
 
-#include <qmainwindow>
-#include <qfiledialog>
-#include <qthread>
+#include <QtWidgets/qmainwindow>
+#include <QtWidgets/qfiledialog>
+#include <QtCore/qthread>
 
 #include "RenderThread.h"
 #include "ui_GUI.h"

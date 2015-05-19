@@ -1,7 +1,7 @@
 // main.cpp : Defines the entry point for the console application.
 //
-#include <qmainwindow>
-#include <qapplication>
+#include <QtWidgets/qmainwindow>
+#include <QtWidgets/qapplication>
 
 #include "GUI.h"
 
